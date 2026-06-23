@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natas 3 → 4 | robots.txt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg: #0a0e14;
+    --bg-card: #111820;
+    --bg-surface: #1a2330;
+    --border: #283340;
+    --border-light: #2d3b4a;
+    --text-primary: #e8edf5;
+    --text-secondary: #9aaec9;
+    --text-muted: #5d738b;
+    --accent-cyan: #6bc4ff;
+    --accent-green: #4ade80;
+    --accent-yellow: #facc15;
+    --accent-rose: #f472b6;
+    --accent-purple: #a78bfa;
+    --accent-orange: #fb923c;
+    --shadow: rgba(0,0,0,0.5);
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-display: 'Space Grotesk', 'Inter', sans-serif;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+  /* ===== HEADER ===== */
+  header {
+    padding: 2.5rem 2rem 1.8rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at 50% 0%, #162033 0%, var(--bg) 70%);
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    opacity: 0.15;
+  }
+
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .back-link:hover {
+    color: var(--accent-cyan);
+  }
+
+  .back-link svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .level-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--accent-green);
+    background: rgba(74, 222, 128, 0.06);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid rgba(74, 222, 128, 0.1);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    max-width: 900px;
+    margin: 0.8rem auto 0.1rem;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .level-sub {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ===== MAIN ===== */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ===== LEVEL CARD ===== */
+  .level {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-card);
+    transition: border-color var(--transition);
+  }
+
+  .level:hover {
+    border-color: var(--border-light);
+  }
+
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+    flex-wrap: wrap;
+  }
+
+  .level-num {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--accent-cyan);
+    min-width: 2.4rem;
+  }
+
+  .level-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .difficulty {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.7rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .diff-easy {
+    background: rgba(74, 222, 128, 0.08);
+    color: var(--accent-green);
+    border: 1px solid rgba(74, 222, 128, 0.12);
+  }
+
+  .diff-medium {
+    background: rgba(250, 204, 21, 0.08);
+    color: var(--accent-yellow);
+    border: 1px solid rgba(250, 204, 21, 0.12);
+  }
+
+  /* ===== LEVEL BODY ===== */
+  .level-body {
+    padding: 1.8rem;
+  }
+
+  .slabel {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .slabel:first-child {
+    margin-top: 0;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+  }
+
+  /* ===== CONCEPTS ===== */
+  .concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .concept {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(167, 139, 250, 0.06);
+    color: var(--accent-purple);
+    border: 1px solid rgba(167, 139, 250, 0.1);
+  }
+
+  /* ===== CODE BLOCK ===== */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    overflow-x: auto;
+    margin: 0.8rem 0;
+    line-height: 1.8;
+    position: relative;
+  }
+
+  .code-block .kw  { color: var(--accent-cyan); }
+  .code-block .val { color: var(--accent-green); }
+  .code-block .str { color: var(--accent-yellow); }
+  .code-block .tag { color: var(--accent-rose); }
+  .code-block .cmt { color: var(--text-muted); font-style: italic; }
+
+  /* ===== HINT ===== */
+  .hint {
+    background: rgba(107, 196, 255, 0.04);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin: 0.8rem 0;
+  }
+
+  /* ===== STEPS ===== */
+  ol.steps {
+    list-style: none;
+    counter-reset: s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  ol.steps li {
+    counter-increment: s;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  ol.steps li::before {
+    content: counter(s);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan);
+    border-radius: 50%;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(107, 196, 255, 0.08);
+  }
+
+  /* ===== PASSWORD BOX ===== */
+  .pw-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(74, 222, 128, 0.04);
+    border: 1px solid rgba(74, 222, 128, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1rem;
+    margin-top: 0.4rem;
+  }
+
+  .pw-box .lbl {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: var(--accent-green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pw-box .pw {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-primary);
+    word-break: break-all;
+  }
+
+  /* ===== LESSONS GRID ===== */
+  .lessons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+  }
+
+  .lesson-card {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1rem;
+    transition: border-color var(--transition);
+  }
+
+  .lesson-card:hover {
+    border-color: var(--border-light);
+  }
+
+  .lesson-card .lc-title {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--accent-cyan);
+    margin-bottom: 0.2rem;
+  }
+
+  .lesson-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* ===== CODE INLINE ===== */
+  code {
+    font-family: var(--font-mono);
+    background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan);
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .nav-levels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-levels a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+  }
+
+  .nav-levels a:hover {
+    color: var(--accent-cyan);
+    background: rgba(107, 196, 255, 0.04);
+  }
+
+  .nav-levels .nav-disabled {
+    color: var(--border);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .level {
+    animation: fadeUp 0.5s ease backwards;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .top-nav { flex-direction: column; align-items: stretch; text-align: center; }
+    .level-header { flex-wrap: wrap; }
+    .level-body { padding: 1.2rem; }
+    .lessons-grid { grid-template-columns: 1fr; }
+    .nav-levels { flex-direction: column; gap: 0.5rem; text-align: center; }
+    header { padding: 1.8rem 1.2rem 1.2rem; }
+    main { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Levels
+    </a>
+    <span class="level-badge">Natas 3 → 4</span>
+  </div>
+  <h1>Level <span>03</span></h1>
+  <p class="level-sub">// robots.txt — Disclosing Hidden Paths</p>
+</header>
+
+<!-- ===== DEVELOPER CREDIT ===== -->
+<div style="display:flex; justify-content:center; align-items:center; gap:0.6rem; padding:0.6rem 1rem; background:var(--bg-surface); border-bottom:1px solid var(--border); max-width:900px; margin:0 auto 0.5rem; border-radius:var(--radius-sm);">
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); letter-spacing:0.05em;">🚀</span>
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted);">Crafted by</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.65rem; font-weight:600; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">⚡</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+</div>
+
+<main>
+  <div class="level">
+    <div class="level-header">
+      <span class="level-num">03</span>
+      <span class="level-title">robots.txt — Disclosing Hidden Paths</span>
+      <span class="difficulty diff-easy">Easy</span>
+    </div>
+    <div class="level-body">
+
+      <p class="slabel">// Key Concepts</p>
+      <div class="concepts">
+        <span class="concept">robots.txt</span>
+        <span class="concept">Information Disclosure</span>
+        <span class="concept">Web Crawlers</span>
+        <span class="concept">Security by Obscurity</span>
+      </div>
+
+      <p class="slabel">// Challenge Overview</p>
+      <p>The page states: <em>"Not even Google will find it this time..."</em> — a direct hint toward the <code>robots.txt</code> file, which instructs search engine crawlers which paths to avoid indexing.</p>
+
+      <p class="slabel">// What is robots.txt?</p>
+      <div class="hint">
+        📄 <code>robots.txt</code> is a standard used to guide web crawlers. The critical flaw is that this file is <strong>publicly accessible</strong> — meaning any path you want to exclude from indexing is explicitly listed for everyone to see.
+      </div>
+
+      <p class="slabel">// Initial Analysis</p>
+      <p>The clue <em>"Not even Google will find it"</em> is a clear reference to <code>robots.txt</code>. This file is typically located at the root of a website and is used to communicate with search engine bots. While it is intended for legitimate purposes (like preventing duplicate content or excluding private admin areas from search results), it has a major flaw:</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li>The file is <strong>publicly accessible</strong> to anyone who requests it</li>
+        <li>It explicitly lists the paths the site owner wants to keep "hidden"</li>
+        <li>This is <strong>security through obscurity</strong> — which is not security at all</li>
+      </ul>
+
+      <p class="slabel">// Solution Walkthrough</p>
+      <ol class="steps">
+        <li>Open the robots.txt file at the root of the website:</li>
+      </ol>
+
+      <div class="code-block">
+http://natas3.natas.labs.overthewire.org/<span class="val">robots.txt</span>
+      </div>
+
+      <ol class="steps" style="counter-reset:s 1">
+        <li>View the contents of the file:</li>
+      </ol>
+
+      <div class="code-block">
+<span class="cmt"># robots.txt for natas3</span>
+<span class="kw">User-agent:</span> <span class="val">*</span>
+<span class="kw">Disallow:</span> <span class="str">/s3cr3t/</span>
+      </div>
+
+      <ol class="steps" style="counter-reset:s 2">
+        <li>Navigate to the disallowed directory — <code>/s3cr3t/</code>.</li>
+        <li>Directory listing is enabled — you'll see a list of files.</li>
+        <li>Open <code>users.txt</code> to retrieve the password.</li>
+      </ol>
+
+      <div class="code-block">
+http://natas3.natas.labs.overthewire.org/<span class="val">s3cr3t/users.txt</span>
+      </div>
+
+      <div class="code-block">
+<span class="cmt"># username:password</span>
+<span class="val">natas4</span>:<span class="str">Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ</span>
+      </div>
+
+      <p class="slabel">// Why It Works</p>
+      <p>The <code>robots.txt</code> file is designed for search engine crawlers, not for security. When a developer adds <code>Disallow: /secret/</code>, they are essentially telling every search engine (and every attacker) exactly where to find the hidden content. This is a classic example of <strong>security through obscurity</strong> — relying on the secrecy of something that is not actually secret.</p>
+
+      <p class="slabel">// The Problem with robots.txt</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li>It is <strong>publicly accessible</strong> — any visitor can request it</li>
+        <li>It <strong>advertises</strong> which paths you want to hide</li>
+        <li>Attackers routinely check this file for sensitive paths</li>
+        <li>It is a <strong>signal</strong> for attackers — "Look here for sensitive content"</li>
+      </ul>
+
+      <p class="slabel">// Defensive Measures</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>Never rely on robots.txt for security</strong> — it is a crawling directive, not an access control mechanism.</li>
+        <li>Use proper <strong>authentication and authorization</strong> to protect sensitive directories.</li>
+        <li>Store sensitive files outside the <strong>web root</strong> when possible.</li>
+        <li>If you must block crawlers, use <strong>meta tags</strong> or <strong>HTTP headers</strong> instead.</li>
+      </ul>
+
+      <div class="hint">💡 robots.txt is designed for SEO, not security. Using it to hide sensitive paths has the opposite effect — it advertises those paths to anyone who checks.</div>
+
+      <p class="slabel">// Credentials</p>
+      <div class="pw-box">
+        <span class="lbl">natas3</span>
+        <span class="pw">sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14</span>
+      </div>
+      <div class="pw-box">
+        <span class="lbl">natas4</span>
+        <span class="pw">Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ</span>
+      </div>
+
+      <p class="slabel">// Key Takeaways</p>
+      <div class="lessons-grid">
+        <div class="lesson-card">
+          <div class="lc-title">🔍 Security ≠ Obscurity</div>
+          <p>Hiding a path in robots.txt only draws attention to it. Real security requires proper access controls, not secrecy.</p>
+        </div>
+        <div class="lesson-card">
+          <div class="lc-title">🤖 Robots.txt is Public</div>
+          <p>This file is intended for crawlers, not for security. It is always public and should never contain sensitive paths.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-levels">
+    <a href="level-2.html">← Previous Level</a>
+    <a href="level-4.html">Next Level →</a>
+  </div>
+</main>
+
+<footer>
+  OverTheWire — Natas Writeup &middot; For Educational Purposes Only
+</footer>
+
+<!-- ===== DEVELOPER FOOTER ===== -->
+<footer style="border-top:1px solid var(--border); padding:2rem 2rem 1.5rem; margin-top:2rem;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:0.8rem; max-width:900px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">Developed with</span>
+      <span style="color:var(--accent-rose);">❤️</span>
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">by</span>
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-display); font-size:0.9rem; font-weight:700; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+    </div>
+    <div style="display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;">
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+      <span style="color:var(--border);">|</span>
+      <a href="mailto:ilyafarahani9@gmail.com" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Email</a>
+    </div>
+    <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--text-muted); letter-spacing:0.05em; opacity:0.6;">&copy; 2025 Leo · OverTheWire Natas Writeup · For Educational Purposes Only</div>
+  </div>
+</footer>
+
+</body>
+</html>

