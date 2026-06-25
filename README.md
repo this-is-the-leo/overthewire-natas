@@ -3,6 +3,8 @@
 
 [![OverTheWire](https://img.shields.io/badge/OverTheWire-Natas-3fb950)](https://overthewire.org/wargames/natas/)
 [![GitHub stars](https://img.shields.io/github/stars/this-is-the-leo/overthewire-natas.svg?style=social)](https://github.com/this-is-the-leo/overthewire-natas)
+[![Latest Release](https://img.shields.io/github/v/release/this-is-the-leo/overthewire-natas?style=for-the-badge&color=4fc3ff)](https://github.com/this-is-the-leo/overthewire-natas/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/this-is-the-leo/overthewire-natas/total?style=for-the-badge&color=a78bfa)](https://github.com/this-is-the-leo/overthewire-natas/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![HTML](https://img.shields.io/badge/HTML-5-orange)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS](https://img.shields.io/badge/CSS-3-blue)](https://developer.mozilla.org/en-US/docs/Web/CSS)
@@ -23,6 +25,7 @@
 - [Project Structure](#project-structure)
 - [Key Security Lessons](#key-security-lessons)
 - [Quick Reference](#quick-reference)
+- [Version History](#version-history)
 - [Installation & Usage](#installation--usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -343,6 +346,33 @@ Session IDs must be cryptographically random with high entropy. Never use sequen
 
 ---
 
+## Version History
+
+[![Latest Release](https://img.shields.io/github/v/release/this-is-the-leo/overthewire-natas?style=for-the-badge&color=4fc3ff)](https://github.com/this-is-the-leo/overthewire-natas/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/this-is-the-leo/overthewire-natas/total?style=for-the-badge&color=a78bfa)](https://github.com/this-is-the-leo/overthewire-natas/releases)
+
+| Version | Date | Status | Download |
+|---------|------|--------|----------|
+| **v0.6.0** | 2026-06-26 | ✅ **Current** | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.6.0) |
+| **v0.5.0** | 2026-06-25 | ✅ Supported | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.5.0) |
+| **v0.4.0** | 2026-06-23 | ✅ Supported | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.4.0) |
+| **v0.3.0** | 2026-06-20 | ✅ Supported | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.3.0) |
+| **v0.2.0** | 2026-06-17 | ✅ Supported | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.2.0) |
+| **v0.1.0** | 2026-06-13 | ✅ Supported | [Download](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.1.0) |
+
+### 📦 What's New in v0.6.0
+
+- 🎉 **Complete bilingual support** — All 35 levels in both English and Persian
+- 📘 **Project overview page** — Comprehensive about page
+- 🎨 **Vazirmatn font** — Persian typography support
+- 🔗 **Fixed navigation links** — Improved user experience
+- 📱 **Mobile responsive** — Works on all devices
+- 📝 **Complete documentation** — README, CHANGELOG, LICENSE
+
+For a complete list of changes, see the [CHANGELOG.md](CHANGELOG.md).
+
+---
+
 ## Installation & Usage
 
 ### Option 1: View Online
@@ -463,6 +493,8 @@ If you found this writeup helpful, please consider starring the repository on Gi
 
 [![OverTheWire](https://img.shields.io/badge/OverTheWire-Natas-3fb950)](https://overthewire.org/wargames/natas/)
 [![GitHub stars](https://img.shields.io/github/stars/this-is-the-leo/overthewire-natas.svg?style=social)](https://github.com/this-is-the-leo/overthewire-natas)
+[![Latest Release](https://img.shields.io/github/v/release/this-is-the-leo/overthewire-natas?style=for-the-badge&color=4fc3ff)](https://github.com/this-is-the-leo/overthewire-natas/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/this-is-the-leo/overthewire-natas/total?style=for-the-badge&color=a78bfa)](https://github.com/this-is-the-leo/overthewire-natas/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![HTML](https://img.shields.io/badge/HTML-5-orange)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS](https://img.shields.io/badge/CSS-3-blue)](https://developer.mozilla.org/en-US/docs/Web/CSS)
@@ -483,6 +515,7 @@ If you found this writeup helpful, please consider starring the repository on Gi
 - [ساختار پروژه](#ساختار-پروژه)
 - [درس‌های کلیدی امنیتی](#درس‌های-کلیدی-امنیتی)
 - [مرجع سریع](#مرجع-سریع)
+- [تاریخچه نسخه‌ها](#تاریخچه-نسخه‌ها)
 - [نصب و استفاده](#نصب-و-استفاده)
 - [مشارکت](#مشارکت)
 - [مجوز](#مجوز)
@@ -800,6 +833,33 @@ natas-writeup/
 | ۳۲ | XXE — موجودیت خارجی | 🔴 خیلی سخت |
 | ۳۳ | XXE — شامل فایل | 🔴 خیلی سخت |
 | ۳۴ | XXE — مبتنی بر DTD | 🔴 خیلی سخت |
+
+---
+
+## تاریخچه نسخه‌ها
+
+[![Latest Release](https://img.shields.io/github/v/release/this-is-the-leo/overthewire-natas?style=for-the-badge&color=4fc3ff)](https://github.com/this-is-the-leo/overthewire-natas/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/this-is-the-leo/overthewire-natas/total?style=for-the-badge&color=a78bfa)](https://github.com/this-is-the-leo/overthewire-natas/releases)
+
+| نسخه | تاریخ | وضعیت | دانلود |
+|------|------|--------|-------|
+| **v0.6.0** | ۲۰۲۶-۰۶-۲۶ | ✅ **فعلی** | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.6.0) |
+| **v0.5.0** | ۲۰۲۶-۰۶-۲۵ | ✅ پشتیبانی شده | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.5.0) |
+| **v0.4.0** | ۲۰۲۶-۰۶-۲۳ | ✅ پشتیبانی شده | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.4.0) |
+| **v0.3.0** | ۲۰۲۶-۰۶-۲۰ | ✅ پشتیبانی شده | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.3.0) |
+| **v0.2.0** | ۲۰۲۶-۰۶-۱۷ | ✅ پشتیبانی شده | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.2.0) |
+| **v0.1.0** | ۲۰۲۶-۰۶-۱۳ | ✅ پشتیبانی شده | [دانلود](https://github.com/this-is-the-leo/overthewire-natas/releases/tag/v0.1.0) |
+
+### 📦 جدید در نسخه v0.6.0
+
+- 🎉 **پشتیبانی کامل دو زبانه** — تمام ۳۵ سطح به دو زبان انگلیسی و فارسی
+- 📘 **صفحه مروری بر پروژه** — صفحه درباره جامع
+- 🎨 **فونت وزیرمتن** — پشتیبانی از تایپوگرافی فارسی
+- 🔗 **رفع لینک‌های ناوبری** — بهبود تجربه کاربری
+- 📱 **پاسخگوی موبایل** — کار بر روی تمام دستگاه‌ها
+- 📝 **مستندسازی کامل** — README، CHANGELOG، LICENSE
+
+برای لیست کامل تغییرات، فایل [CHANGELOG.md](CHANGELOG.md) را ببینید.
 
 ---
 
