@@ -548,7 +548,7 @@ Leo (Ilya Farahani)
 
 🌐 GitHub: github.com/this-is-the-leo
 
-🔗 LinkedIn: linkedin.com/in/ilya-farahani
+🔗 LinkedIn: linkedin.com/in/ilya-farahani-2160103b0
 
 💬 Telegram: t.me/Here_is_leo
 
