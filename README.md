@@ -242,7 +242,7 @@ Visit the GitHub Pages URL to view the writeup in your browser.
 
 ### Option 2: Clone Locally
 
-```bash
+bash
 git clone https://github.com/this-is-the-leo/natas-writeup.git
 cd natas-writeup
 Then open index.html in your browser to start exploring.
@@ -304,7 +304,7 @@ Leo (Ilya Farahani)
 
 🌐 GitHub: github.com/this-is-the-leo
 
-🔗 LinkedIn: linkedin.com/in/ilya-farahani
+🔗 LinkedIn: linkedin.com/in/ilya-farahani-2160103b0
 
 💬 Telegram: t.me/Here_is_leo
 
