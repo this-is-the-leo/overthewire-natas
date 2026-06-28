@@ -500,28 +500,35 @@
       padding: 0 0.5rem;
     }
     .top-nav-overview .overview-link {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      color: var(--text-muted);
+      font-family: 'Vazirmatn', var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
       text-decoration: none;
-      transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 1rem;
-      border: 1px solid var(--border);
+      gap: 0.45rem;
+      padding: 0.4rem 1.1rem;
       border-radius: var(--radius-full);
-      background: rgba(79, 195, 255, 0.02);
+      border: 1px solid rgba(79, 195, 255, 0.4);
+      background: rgba(79, 195, 255, 0.06);
+      box-shadow: 0 0 16px rgba(79, 195, 255, 0.15), inset 0 0 10px rgba(79, 195, 255, 0.04);
+      animation: overviewPulse 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    @keyframes overviewPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(79, 195, 255, 0.15), inset 0 0 8px rgba(79, 195, 255, 0.03); border-color: rgba(79, 195, 255, 0.35); }
+      50%       { box-shadow: 0 0 28px rgba(79, 195, 255, 0.35), inset 0 0 14px rgba(79, 195, 255, 0.07); border-color: rgba(79, 195, 255, 0.65); }
     }
     .top-nav-overview .overview-link:hover {
-      color: var(--accent-cyan);
-      border-color: rgba(79, 195, 255, 0.15);
-      background: rgba(79, 195, 255, 0.05);
+      color: #fff;
+      background: rgba(79, 195, 255, 0.12);
+      border-color: rgba(79, 195, 255, 0.7);
+      box-shadow: 0 0 36px rgba(79, 195, 255, 0.4), inset 0 0 16px rgba(79, 195, 255, 0.08);
       transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(79, 195, 255, 0.05);
     }
     .top-nav-overview .overview-link .icon {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
     }
     .top-nav-overview .version {
       font-family: var(--font-mono);
@@ -2412,10 +2419,10 @@
     return false;
   });
 
-  document.addEventListener('copy', function(e) {
-    e.preventDefault();
-    return false;
-  });
+// document.addEventListener('copy', function(e) {
+  //   e.preventDefault();
+  //   return false;
+  // });
 
   // ============================================================
   // SWITCH LANGUAGE
