@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Natas Writeup · OverTheWire</title>
+  <title>ناتاس · راهنمای کامل · OverTheWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
   <style>
     /* ===== RESET & ROOT ===== */
     * {
@@ -78,7 +79,6 @@
       }
     }
 
-    /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -90,16 +90,16 @@
       margin: 8px 0;
     }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg,
-        var(--accent-cyan),
-        var(--accent-purple),
+      background: linear-gradient(180deg, 
+        var(--accent-cyan), 
+        var(--accent-purple), 
         var(--accent-rose),
         var(--accent-orange)
       );
       background-size: 100% 300%;
       border-radius: var(--radius-full);
       border: 3px solid var(--bg);
-      box-shadow:
+      box-shadow: 
         0 0 40px rgba(79, 195, 255, 0.12),
         0 0 80px rgba(167, 139, 250, 0.08),
         inset 0 0 20px rgba(255,255,255,0.04);
@@ -115,7 +115,7 @@
     ::-webkit-scrollbar-thumb:hover {
       transform: scale(1.1);
       border-width: 2px;
-      box-shadow:
+      box-shadow: 
         0 0 70px rgba(79, 195, 255, 0.25),
         0 0 140px rgba(167, 139, 250, 0.18),
         0 0 200px rgba(244, 114, 182, 0.12),
@@ -130,7 +130,6 @@
     }
     ::-webkit-scrollbar-corner { background: transparent; }
 
-    /* ===== BG LAYERS ===== */
     .bg-layer {
       position: fixed;
       top: 0;
@@ -142,7 +141,7 @@
       border-radius: 0;
     }
     .bg-layer-1 {
-      background:
+      background: 
         radial-gradient(ellipse at 20% 30%, rgba(79, 195, 255, 0.05) 0%, transparent 60%),
         radial-gradient(ellipse at 80% 70%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
         radial-gradient(ellipse at 50% 50%, rgba(244, 114, 182, 0.03) 0%, transparent 70%);
@@ -154,7 +153,7 @@
       100% { opacity: 0.6; transform: scale(0.96); }
     }
     .bg-layer-2 {
-      background:
+      background: 
         radial-gradient(circle at 30% 40%, rgba(79, 195, 255, 0.04) 0%, transparent 40%),
         radial-gradient(circle at 70% 60%, rgba(167, 139, 250, 0.04) 0%, transparent 40%);
       animation: bgOrbit 35s linear infinite;
@@ -176,23 +175,22 @@
       opacity: 0.35;
     }
 
-    /* ===== SCROLL PROGRESS ===== */
     .scroll-progress {
       position: fixed;
       top: 0;
       left: 0;
       width: 0;
       height: 4px;
-      background: linear-gradient(90deg,
-        var(--accent-cyan),
-        var(--accent-purple),
+      background: linear-gradient(90deg, 
+        var(--accent-cyan), 
+        var(--accent-purple), 
         var(--accent-rose),
         var(--accent-orange),
         var(--accent-yellow)
       );
       z-index: 9999;
       transition: width 0.08s ease-out;
-      box-shadow:
+      box-shadow: 
         0 0 40px rgba(79, 195, 255, 0.25),
         0 0 80px rgba(167, 139, 250, 0.12);
       border-radius: 0 var(--radius-full) var(--radius-full) 0;
@@ -204,10 +202,9 @@
       50% { background-position: 100% 0%; }
     }
 
-    /* ===== NEON SIDEBAR (LEFT) ===== */
     .neon-sidebar {
       position: fixed;
-      left: 20px;
+      right: 20px;
       top: 50%;
       transform: translateY(-50%);
       width: 72px;
@@ -217,7 +214,7 @@
       border: 1px solid rgba(79, 195, 255, 0.06);
       border-radius: var(--radius-xl);
       padding: 24px 0;
-      box-shadow:
+      box-shadow: 
         0 0 80px rgba(79, 195, 255, 0.02),
         inset 0 0 80px rgba(79, 195, 255, 0.02);
       z-index: 1000;
@@ -235,10 +232,10 @@
       inset: -2px;
       border-radius: calc(var(--radius-xl) + 2px);
       padding: 2px;
-      background: linear-gradient(135deg,
-        var(--accent-cyan),
-        var(--accent-purple),
-        var(--accent-rose),
+      background: linear-gradient(135deg, 
+        var(--accent-cyan), 
+        var(--accent-purple), 
+        var(--accent-rose), 
         var(--accent-cyan)
       );
       background-size: 300% 300%;
@@ -260,7 +257,7 @@
     }
 
     @keyframes sidebarEnter {
-      0% { opacity: 0; transform: translateY(-50%) translateX(-50px) scale(0.85); }
+      0% { opacity: 0; transform: translateY(-50%) translateX(50px) scale(0.85); }
       100% { opacity: 1; transform: translateY(-50%) translateX(0) scale(1); }
     }
 
@@ -374,7 +371,7 @@
     .sidebar-nav a::after {
       content: attr(data-tooltip);
       position: absolute;
-      left: calc(100% + 18px);
+      right: calc(100% + 18px);
       top: 50%;
       transform: translateY(-50%);
       background: var(--bg-surface);
@@ -393,10 +390,9 @@
     }
     .sidebar-nav a:hover::after {
       opacity: 1;
-      transform: translateY(-50%) translateX(6px);
+      transform: translateY(-50%) translateX(-6px);
     }
 
-    /* ===== HEADER ===== */
     header {
       position: relative;
       z-index: 3;
@@ -469,13 +465,13 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg,
-        transparent,
-        var(--accent-cyan),
-        var(--accent-purple),
-        var(--accent-rose),
+      background: linear-gradient(90deg, 
+        transparent, 
+        var(--accent-cyan), 
+        var(--accent-purple), 
+        var(--accent-rose), 
         var(--accent-orange),
-        var(--accent-cyan),
+        var(--accent-cyan), 
         transparent
       );
       background-size: 300% 100%;
@@ -504,10 +500,9 @@
       padding: 0 0.5rem;
     }
     .top-nav-overview .overview-link {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
+      font-family: 'Vazirmatn', var(--font-mono);
+      font-size: 0.7rem;
       font-weight: 600;
-      letter-spacing: 0.06em;
       color: var(--accent-cyan);
       text-decoration: none;
       display: inline-flex;
@@ -533,7 +528,7 @@
       transform: translateY(-2px);
     }
     .top-nav-overview .overview-link .icon {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
     }
     .top-nav-overview .version {
       font-family: var(--font-mono);
@@ -586,7 +581,7 @@
 
     .natas-word {
       display: flex;
-      gap: 0.05rem;
+      gap: 0.1rem;
       font-family: var(--font-display);
       font-weight: 800;
       font-size: clamp(4rem, 12vw, 7rem);
@@ -601,18 +596,16 @@
       transform-style: preserve-3d;
     }
     .natas-letter:nth-child(1) { animation-delay: 0s; }
-    .natas-letter:nth-child(2) { animation-delay: 0.4s; }
-    .natas-letter:nth-child(3) { animation-delay: 0.8s; }
-    .natas-letter:nth-child(4) { animation-delay: 0.2s; }
-    .natas-letter:nth-child(5) { animation-delay: 0.6s; }
+    .natas-letter:nth-child(2) { animation-delay: 0.15s; }
+    .natas-letter:nth-child(3) { animation-delay: 0.3s; }
 
     @keyframes letterFloat {
-      0%, 100% {
+      0%, 100% { 
         transform: translateY(0px) rotateX(0deg) rotateY(0deg) scale(1);
         text-shadow: 0 0 20px rgba(79, 195, 255, 0.02);
       }
       25% { transform: translateY(-6px) rotateX(5deg) rotateY(-3deg) scale(1.02); }
-      50% {
+      50% { 
         transform: translateY(-12px) rotateX(-3deg) rotateY(3deg) scale(1.06);
         text-shadow: 0 15px 50px rgba(79, 195, 255, 0.06), 0 0 100px rgba(167, 139, 250, 0.03);
       }
@@ -661,14 +654,14 @@
     }
     .writeup-suffix::before {
       content: '✦';
-      margin-right: 0.4rem;
+      margin-left: 0.4rem;
       font-size: 0.6em;
       opacity: 0.2;
       color: var(--accent-cyan);
     }
     .writeup-suffix::after {
       content: '✦';
-      margin-left: 0.4rem;
+      margin-right: 0.4rem;
       font-size: 0.6em;
       opacity: 0.2;
       color: var(--accent-cyan);
@@ -778,17 +771,16 @@
     .dev-credit .link:hover { color: var(--accent-cyan); text-shadow: 0 0 20px rgba(79, 195, 255, 0.08); }
     .dev-credit .sep { color: var(--border); font-size: 0.4rem; }
 
-    /* ===== MAIN ===== */
     main {
       position: relative;
       z-index: 2;
       max-width: 1100px;
       margin: 0 auto;
       padding: 3rem 1.5rem 5rem;
-      padding-left: 115px;
+      padding-right: 115px;
     }
 
-    /* ===== DONATION BANNER - English Version ===== */
+    /* ===== DONATION BANNER ===== */
     .donation-banner-wrapper {
       position: relative;
       max-width: 100%;
@@ -885,7 +877,7 @@
       font-weight: 900;
       color: #e8e8f5;
       line-height: 1.2;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Vazirmatn', 'Inter', sans-serif;
       letter-spacing: -0.5px;
     }
 
@@ -911,7 +903,7 @@
       color: #9a9ac0;
       max-width: 80%;
       line-height: 2;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Vazirmatn', 'Inter', sans-serif;
     }
 
     .donation-sub strong {
@@ -949,8 +941,8 @@
       box-shadow: 0 8px 50px rgba(42, 42, 90, 0.12), 0 0 80px rgba(42, 42, 90, 0.02);
       animation: btnPulse 3s ease-in-out infinite;
       min-width: 220px;
-      font-family: 'Inter', sans-serif;
-      transition:
+      font-family: 'Vazirmatn', 'Inter', sans-serif;
+      transition: 
         transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
         background 0.8s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.8s cubic-bezier(0.22, 1, 0.36, 1),
@@ -958,11 +950,11 @@
     }
 
     @keyframes btnPulse {
-      0%, 100% {
+      0%, 100% { 
         box-shadow: 0 8px 50px rgba(42, 42, 90, 0.12), 0 0 80px rgba(42, 42, 90, 0.02);
         transform: scale(1);
       }
-      50% {
+      50% { 
         box-shadow: 0 8px 60px rgba(74, 74, 138, 0.2), 0 0 120px rgba(74, 74, 138, 0.04);
         transform: scale(1.01);
       }
@@ -1004,11 +996,11 @@
       animation: btnHoverGradient 1.5s ease-in-out infinite !important;
       color: #02040c;
       transform: translateY(-6px) scale(1.04);
-      box-shadow:
+      box-shadow: 
         0 14px 70px rgba(255, 217, 61, 0.35),
         0 0 120px rgba(255, 107, 107, 0.15),
         0 0 200px rgba(255, 107, 255, 0.08);
-      transition:
+      transition: 
         transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
         background 0.9s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.9s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1077,7 +1069,7 @@
       border: 1px solid rgba(255, 255, 255, 0.01);
       transition: all 0.4s ease;
       animation: messageDance 3s ease-in-out infinite;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Vazirmatn', 'Inter', sans-serif;
     }
 
     @keyframes messageDance {
@@ -1122,7 +1114,7 @@
       color: #8a8aba;
       letter-spacing: 0.3px;
       backdrop-filter: blur(4px);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Vazirmatn', 'Inter', sans-serif;
     }
 
     .donation-badge .dot {
@@ -1140,7 +1132,6 @@
       50% { opacity: 0.2; transform: scale(0.6); box-shadow: 0 0 5px rgba(74, 74, 138, 0.02); }
     }
 
-    /* ===== INTRO ===== */
     .intro {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -1178,12 +1169,14 @@
       margin-bottom: 0.5rem;
       letter-spacing: -0.01em;
       color: #f0f6fc;
+      text-align: right;
     }
     .intro p {
       color: var(--text-secondary);
       font-size: 0.9rem;
       max-width: 680px;
       opacity: 0.8;
+      text-align: right;
     }
 
     .stats-bar {
@@ -1221,11 +1214,12 @@
       transform: translateY(-4px);
       animation: terminalEnter 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.9s forwards;
       border-radius: var(--radius-md);
-      box-shadow:
+      box-shadow: 
         0 8px 60px rgba(0, 0, 0, 0.5),
         inset 0 0 80px rgba(79, 195, 255, 0.02);
       transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
+      direction: ltr;
     }
     .terminal-panel::before {
       content: '';
@@ -1233,10 +1227,10 @@
       inset: -2px;
       border-radius: calc(var(--radius-md) + 2px);
       padding: 2px;
-      background: linear-gradient(135deg,
-        var(--accent-cyan),
-        var(--accent-purple),
-        var(--accent-rose),
+      background: linear-gradient(135deg, 
+        var(--accent-cyan), 
+        var(--accent-purple), 
+        var(--accent-rose), 
         var(--accent-cyan)
       );
       background-size: 300% 300%;
@@ -1254,7 +1248,7 @@
 
     .terminal-panel:hover {
       border-color: rgba(79, 195, 255, 0.15);
-      box-shadow:
+      box-shadow: 
         0 12px 80px rgba(0, 0, 0, 0.6),
         0 0 100px rgba(79, 195, 255, 0.04),
         inset 0 0 80px rgba(79, 195, 255, 0.03);
@@ -1262,8 +1256,8 @@
     }
 
     @keyframes terminalEnter {
-      0% {
-        opacity: 0;
+      0% { 
+        opacity: 0; 
         transform: translateY(20px) scale(0.96);
         filter: blur(6px);
       }
@@ -1271,8 +1265,8 @@
         transform: translateY(-3px) scale(1.005);
         filter: blur(0);
       }
-      100% {
-        opacity: 1;
+      100% { 
+        opacity: 1; 
         transform: translateY(0) scale(1);
         filter: blur(0);
       }
@@ -1309,8 +1303,8 @@
     }
     .terminal-dots { display: flex; gap: 5px; }
     .terminal-dot {
-      width: 10px;
-      height: 10px;
+      width: 10px; 
+      height: 10px; 
       border-radius: 50%;
       transition: all 0.3s ease;
       position: relative;
@@ -1368,15 +1362,15 @@
       background: radial-gradient(ellipse at 30% 30%, rgba(12, 21, 34, 0.5), transparent 70%);
     }
 
-    .t-line {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      opacity: 0;
+    .t-line { 
+      display: flex; 
+      align-items: baseline; 
+      gap: 0.5rem; 
+      opacity: 0; 
       transition: all 0.4s ease;
     }
-    .t-line.visible {
-      opacity: 1;
+    .t-line.visible { 
+      opacity: 1; 
       animation: terminalLineGlow 3s ease-in-out infinite;
     }
     @keyframes terminalLineGlow {
@@ -1384,9 +1378,9 @@
       50% { text-shadow: 0 0 20px rgba(79, 195, 255, 0.04), 0 0 40px rgba(167, 139, 250, 0.02); }
     }
 
-    .t-prompt {
-      color: var(--accent-green);
-      flex-shrink: 0;
+    .t-prompt { 
+      color: var(--accent-green); 
+      flex-shrink: 0; 
       font-weight: 500;
       text-shadow: 0 0 20px rgba(74, 222, 128, 0.05);
       animation: promptGlow 2s ease-in-out infinite;
@@ -1402,10 +1396,10 @@
     .t-cmd .str { color: var(--accent-green); }
     .t-cmd .op  { color: var(--accent-rose); }
 
-    .t-out    {
-      color: var(--text-muted);
-      padding-left: 1.2rem;
-      font-size: 0.65rem;
+    .t-out    { 
+      color: var(--text-muted); 
+      padding-left: 1.2rem; 
+      font-size: 0.65rem; 
       animation: outputFade 0.6s ease forwards;
     }
     @keyframes outputFade {
@@ -1433,7 +1427,6 @@
       50% { opacity: 0; }
     }
 
-    /* ===== SECTION DIVIDER ===== */
     .section-divider {
       display: flex;
       align-items: center;
@@ -1464,7 +1457,6 @@
       box-shadow: 0 0 30px rgba(79, 195, 255, 0.02);
     }
 
-    /* ===== LEVEL GRID ===== */
     .level-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -1610,6 +1602,7 @@
       display: block;
       letter-spacing: -0.01em;
       color: var(--text-primary);
+      text-align: right;
     }
     .level-card .info .desc {
       font-size: 0.65rem;
@@ -1617,13 +1610,13 @@
       color: var(--text-muted);
       display: block;
       margin-top: 0.05rem;
+      text-align: right;
     }
 
     .level-card .level-progress {
       display: none;
     }
 
-    /* ===== FOOTER ===== */
     footer {
       position: relative;
       z-index: 2;
@@ -1677,7 +1670,6 @@
     .footer-dev .social-links .sep { color: var(--border); }
     .footer-copy { font-size: 0.45rem; opacity: 0.3; letter-spacing: 0.1em; }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .donation-banner {
         padding: 28px 20px 24px;
@@ -1772,14 +1764,14 @@
     }
 
     @media (max-width: 600px) {
-      .neon-sidebar { left: 8px; width: 50px; padding: 16px 0; gap: 14px; border-radius: var(--radius-lg); }
+      .neon-sidebar { right: 8px; width: 50px; padding: 16px 0; gap: 14px; border-radius: var(--radius-lg); }
       .progress-ring { width: 36px; height: 36px; }
       .progress-ring .bg, .progress-ring .progress { stroke-width: 2.5; }
       .level-counter .current { font-size: 0.85rem; }
       .sidebar-nav a { width: 5px; height: 5px; }
       .sidebar-nav { gap: 10px; }
       .sidebar-nav a::after { display: none; }
-      main { padding-left: 72px; }
+      main { padding-right: 72px; }
       header { padding: 2rem 1rem 1.8rem; }
       .natas-word { font-size: clamp(2.8rem, 14vw, 4rem); }
       .writeup-suffix { font-size: clamp(1.4rem, 5vw, 2.2rem); }
@@ -1812,7 +1804,7 @@
 <!-- ===== NEON SIDEBAR ===== -->
 <aside class="neon-sidebar" role="navigation" aria-label="Navigation">
   <div class="sidebar-icon">✦</div>
-
+  
   <div class="progress-ring">
     <svg width="52" height="52" viewBox="0 0 52 52">
       <defs>
@@ -1831,19 +1823,19 @@
   </div>
 
   <div class="level-counter">
-    <span class="current" id="levelNumber">00</span>
-    / 35
+    <span class="current" id="levelNumber">۰۰</span>
+    / ۳۵
   </div>
 
   <div class="sidebar-divider"></div>
 
   <div class="sidebar-nav">
-    <a href="#section1" data-level="00" data-tooltip="Fundamentals" class="active"></a>
-    <a href="#section2" data-level="06" data-tooltip="Server-Side"></a>
-    <a href="#section3" data-level="11" data-tooltip="Crypto & Upload"></a>
-    <a href="#section4" data-level="16" data-tooltip="Blind Injection"></a>
-    <a href="#section5" data-level="21" data-tooltip="Advanced Injection"></a>
-    <a href="#section6" data-level="26" data-tooltip="Object Injection"></a>
+    <a href="#section1" data-level="00" data-tooltip="مفاهیم پایه" class="active"></a>
+    <a href="#section2" data-level="06" data-tooltip="سمت سرور"></a>
+    <a href="#section3" data-level="11" data-tooltip="رمزنگاری و آپلود"></a>
+    <a href="#section4" data-level="16" data-tooltip="تزریق کور"></a>
+    <a href="#section5" data-level="21" data-tooltip="تزریق پیشرفته"></a>
+    <a href="#section6" data-level="26" data-tooltip="تزریق آبجکت"></a>
     <a href="#section7" data-level="31" data-tooltip="XXE"></a>
   </div>
 </aside>
@@ -1869,42 +1861,40 @@
   <div class="top-nav-overview">
     <a href="overview.html" class="overview-link">
       <span class="icon">📘</span>
-      About This Project
+      درباره پروژه
     </a>
-    <span class="version">v2.0</span>
+    <span class="version">نسخه ۲.۰</span>
   </div>
 
-  <div class="badge">OverTheWire · Wargames</div>
+  <div class="badge">OverTheWire · بازی‌های جنگی</div>
 
   <div class="natas-showcase">
     <div class="natas-word">
-      <span class="natas-letter"><span>N</span></span>
-      <span class="natas-letter"><span>a</span></span>
-      <span class="natas-letter"><span>t</span></span>
-      <span class="natas-letter"><span>a</span></span>
-      <span class="natas-letter"><span>s</span></span>
+      <span class="natas-letter" style="animation-delay:0s;"><span>نا</span></span>
+      <span class="natas-letter" style="animation-delay:0.15s;"><span>تا</span></span>
+      <span class="natas-letter" style="animation-delay:0.3s;"><span>س</span></span>
     </div>
-    <span class="writeup-suffix">Writeup</span>
+    <span class="writeup-suffix">راهنما</span>
   </div>
 
-  <p class="subtitle">// <span>Web Security</span> Fundamentals — Step by Step</p>
+  <p class="subtitle">// <span>امنیت وب</span> مفاهیم پایه تا پیشرفته</p>
 
   <div class="lang-switch">
-    <button class="lang-btn active" onclick="switchLanguage('en')">EN</button>
-    <button class="lang-btn" onclick="switchLanguage('fa')">FA</button>
+    <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+    <button class="lang-btn active" onclick="switchLanguage('fa')">FA</button>
   </div>
 </header>
 
 <div class="dev-credit">
   <span>⚡</span>
-  <span>Crafted by</span>
-  <a href="https://github.com/this-is-the-leo" target="_blank" class="name">Leo</a>
+  <span>ساخته شده توسط</span>
+  <a href="https://github.com/this-is-the-leo" target="_blank" class="name">لئو</a>
   <span>·</span>
-  <a href="https://github.com/this-is-the-leo" target="_blank" class="link">GitHub</a>
+  <a href="https://github.com/this-is-the-leo" target="_blank" class="link">گیت‌هاب</a>
   <span class="sep">|</span>
-  <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" class="link">LinkedIn</a>
+  <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank" class="link">لینکدین</a>
   <span class="sep">|</span>
-  <a href="https://t.me/Here_is_leo" target="_blank" class="link">Telegram</a>
+  <a href="https://t.me/Here_is_leo" target="_blank" class="link">تلگرام</a>
 </div>
 
 <main>
@@ -1928,28 +1918,28 @@
       <div class="donation-content">
         <div class="donation-badge">
           <span class="dot"></span>
-          <span>🎉 Support Content Creation</span>
+          <span>🎉 حمایت از تولید محتوا</span>
         </div>
 
         <h2 class="donation-title">
-          If you enjoy <br>
-          <span class="highlight">my content</span>
+          اگر از محتوای من<br>
+          <span class="highlight">لذت می‌برید</span>
         </h2>
 
         <p class="donation-sub">
-          Support me with <strong>a coffee ☕</strong> so I can <br>
-          keep producing high-quality content.
+          با <strong>یک قهوه ☕</strong> از من حمایت کنید تا<br>
+          بتوانم محتوای باکیفیت‌تری تولید کنم.
         </p>
 
         <div class="donation-footer">
           <a href="https://www.coffeebede.com/leo" target="_blank" class="donate-btn" id="donateBtn">
             <span class="icon">☕</span>
-            <span class="btn-text">Buy me a coffee</span>
+            <span class="btn-text">برای من قهوه بخر</span>
           </a>
 
           <div class="donate-message">
             <span class="emoji">🎊</span>
-            <span>Every coffee = <span class="highlight-msg">a new celebration</span></span>
+            <span>هر قهوه = <span class="highlight-msg">یک جشن تازه</span></span>
           </div>
         </div>
       </div>
@@ -1957,20 +1947,19 @@
   </div>
 
   <div class="intro">
-    <h2>📖 About This Writeup</h2>
+    <h2>📖 درباره این راهنما</h2>
     <p>
-      A comprehensive walkthrough of the Natas wargame from OverTheWire.
-      Each level covers a specific web security vulnerability with detailed
-      analysis, solution steps, and defensive recommendations.
+      راهنمای کامل بازی ناتاس از OverTheWire. هر سطح شامل یک آسیب‌پذیری خاص
+      در امنیت وب با تحلیل دقیق، مراحل حل و توصیه‌های دفاعی است.
     </p>
 
     <div class="stats-bar">
-      <span class="stat">📚 <span>35</span> Levels</span>
-      <span class="stat">🟢 <span>5</span> Very Easy</span>
-      <span class="stat">🟢 <span>7</span> Easy</span>
-      <span class="stat">🟡 <span>2</span> Medium</span>
-      <span class="stat">🟠 <span>10</span> Hard</span>
-      <span class="stat">🔴 <span>11</span> Very Hard</span>
+      <span class="stat">📚 <span>۳۵</span> سطح</span>
+      <span class="stat">🟢 <span>۵</span> خیلی آسان</span>
+      <span class="stat">🟢 <span>۷</span> آسان</span>
+      <span class="stat">🟡 <span>۲</span> متوسط</span>
+      <span class="stat">🟠 <span>۱۰</span> سخت</span>
+      <span class="stat">🔴 <span>۱۱</span> خیلی سخت</span>
     </div>
   </div>
 
@@ -1992,406 +1981,406 @@
 
   <!-- ===== SECTION 1 ===== -->
   <div class="section-divider" id="section1">
-    <span class="section-num">01</span>
-    Fundamentals
+    <span class="section-num">۰۱</span>
+    مفاهیم پایه
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-00.html" class="level-card" data-level="00">
+    <a href="./Levels/fa-00.html" class="level-card" data-level="00">
       <div class="level-header">
-        <span class="num">00</span>
-        <span class="diff diff-very-easy">Very Easy</span>
+        <span class="num">۰۰</span>
+        <span class="diff diff-very-easy">خیلی آسان</span>
       </div>
       <div class="info">
-        <span class="title">View Source</span>
-        <span class="desc">HTML Comments</span>
+        <span class="title">مشاهده سورس</span>
+        <span class="desc">کامنت‌های HTML</span>
       </div>
     </a>
-    <a href="./Levels/en-01.html" class="level-card" data-level="01">
+    <a href="./Levels/fa-01.html" class="level-card" data-level="01">
       <div class="level-header">
-        <span class="num">01</span>
-        <span class="diff diff-very-easy">Very Easy</span>
+        <span class="num">۰۱</span>
+        <span class="diff diff-very-easy">خیلی آسان</span>
       </div>
       <div class="info">
-        <span class="title">Right-click Block</span>
-        <span class="desc">JS Bypass</span>
+        <span class="title">مسدودسازی کلیک راست</span>
+        <span class="desc">دور زدن JS</span>
       </div>
     </a>
-    <a href="./Levels/en-02.html" class="level-card" data-level="02">
+    <a href="./Levels/fa-02.html" class="level-card" data-level="02">
       <div class="level-header">
-        <span class="num">02</span>
-        <span class="diff diff-easy">Easy</span>
+        <span class="num">۰۲</span>
+        <span class="diff diff-easy">آسان</span>
       </div>
       <div class="info">
-        <span class="title">Hidden File</span>
-        <span class="desc">Directory Listing</span>
+        <span class="title">فایل مخفی</span>
+        <span class="desc">لیست دایرکتوری</span>
       </div>
     </a>
-    <a href="./Levels/en-03.html" class="level-card" data-level="03">
+    <a href="./Levels/fa-03.html" class="level-card" data-level="03">
       <div class="level-header">
-        <span class="num">03</span>
-        <span class="diff diff-easy">Easy</span>
+        <span class="num">۰۳</span>
+        <span class="diff diff-easy">آسان</span>
       </div>
       <div class="info">
         <span class="title">robots.txt</span>
-        <span class="desc">Info Disclosure</span>
+        <span class="desc">افشای اطلاعات</span>
       </div>
     </a>
-    <a href="./Levels/en-04.html" class="level-card" data-level="04">
+    <a href="./Levels/fa-04.html" class="level-card" data-level="04">
       <div class="level-header">
-        <span class="num">04</span>
-        <span class="diff diff-medium">Medium</span>
+        <span class="num">۰۴</span>
+        <span class="diff diff-medium">متوسط</span>
       </div>
       <div class="info">
         <span class="title">HTTP Referer</span>
-        <span class="desc">Header Spoofing</span>
+        <span class="desc">جعل هدر</span>
       </div>
     </a>
-    <a href="./Levels/en-05.html" class="level-card" data-level="05">
+    <a href="./Levels/fa-05.html" class="level-card" data-level="05">
       <div class="level-header">
-        <span class="num">05</span>
-        <span class="diff diff-medium">Medium</span>
+        <span class="num">۰۵</span>
+        <span class="diff diff-medium">متوسط</span>
       </div>
       <div class="info">
-        <span class="title">Cookie Manipulation</span>
-        <span class="desc">Client-side Auth</span>
+        <span class="title">دستکاری کوکی</span>
+        <span class="desc">احراز هویت سمت کلاینت</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 2 ===== -->
   <div class="section-divider" id="section2">
-    <span class="section-num">02</span>
-    Server-Side Vulnerabilities
+    <span class="section-num">۰۲</span>
+    آسیب‌پذیری‌های سمت سرور
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-06.html" class="level-card" data-level="06">
+    <a href="./Levels/fa-06.html" class="level-card" data-level="06">
       <div class="level-header">
-        <span class="num">06</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۰۶</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
         <span class="title">PHP Include</span>
-        <span class="desc">Code Injection</span>
+        <span class="desc">تزریق کد</span>
       </div>
     </a>
-    <a href="./Levels/en-07.html" class="level-card" data-level="07">
+    <a href="./Levels/fa-07.html" class="level-card" data-level="07">
       <div class="level-header">
-        <span class="num">07</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۰۷</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
-        <span class="title">Path Traversal</span>
-        <span class="desc">Directory Traversal</span>
+        <span class="title">مسیر traversal</span>
+        <span class="desc">دسترسی به دایرکتوری</span>
       </div>
     </a>
-    <a href="./Levels/en-08.html" class="level-card" data-level="08">
+    <a href="./Levels/fa-08.html" class="level-card" data-level="08">
       <div class="level-header">
-        <span class="num">08</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۰۸</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Encoding Bypass</span>
-        <span class="desc">Base64 &amp; Reverse</span>
+        <span class="title">دور زدن encoding</span>
+        <span class="desc">Base64 و Reverse</span>
       </div>
     </a>
-    <a href="./Levels/en-09.html" class="level-card" data-level="09">
+    <a href="./Levels/fa-09.html" class="level-card" data-level="09">
       <div class="level-header">
-        <span class="num">09</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۰۹</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Command Injection</span>
-        <span class="desc">OS Command Execution</span>
+        <span class="title">تزریق دستور</span>
+        <span class="desc">اجرای دستور سیستمی</span>
       </div>
     </a>
-    <a href="./Levels/en-10.html" class="level-card" data-level="10">
+    <a href="./Levels/fa-10.html" class="level-card" data-level="10">
       <div class="level-header">
-        <span class="num">10</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۰</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Command Injection</span>
-        <span class="desc">Filter Bypass</span>
+        <span class="title">تزریق دستور</span>
+        <span class="desc">دور زدن فیلتر</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 3 ===== -->
   <div class="section-divider" id="section3">
-    <span class="section-num">03</span>
-    Cryptography &amp; File Upload
+    <span class="section-num">۰۳</span>
+    رمزنگاری و آپلود فایل
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-11.html" class="level-card" data-level="11">
+    <a href="./Levels/fa-11.html" class="level-card" data-level="11">
       <div class="level-header">
-        <span class="num">11</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۱۱</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
-        <span class="title">XOR Encryption</span>
-        <span class="desc">Weak Crypto Bypass</span>
+        <span class="title">رمزنگاری XOR</span>
+        <span class="desc">دور زدن رمز ضعیف</span>
       </div>
     </a>
-    <a href="./Levels/en-12.html" class="level-card" data-level="12">
+    <a href="./Levels/fa-12.html" class="level-card" data-level="12">
       <div class="level-header">
-        <span class="num">12</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۱۲</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
-        <span class="title">File Upload</span>
-        <span class="desc">Client-Side Validation</span>
+        <span class="title">آپلود فایل</span>
+        <span class="desc">اعتبارسنجی سمت کلاینت</span>
       </div>
     </a>
-    <a href="./Levels/en-13.html" class="level-card" data-level="13">
+    <a href="./Levels/fa-13.html" class="level-card" data-level="13">
       <div class="level-header">
-        <span class="num">13</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۳</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">File Upload</span>
-        <span class="desc">Server-Side Validation</span>
+        <span class="title">آپلود فایل</span>
+        <span class="desc">اعتبارسنجی سمت سرور</span>
       </div>
     </a>
-    <a href="./Levels/en-14.html" class="level-card" data-level="14">
+    <a href="./Levels/fa-14.html" class="level-card" data-level="14">
       <div class="level-header">
-        <span class="num">14</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۴</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">SQL Injection</span>
-        <span class="desc">Auth Bypass</span>
+        <span class="title">تزریق SQL</span>
+        <span class="desc">دور زدن احراز هویت</span>
       </div>
     </a>
-    <a href="./Levels/en-15.html" class="level-card" data-level="15">
+    <a href="./Levels/fa-15.html" class="level-card" data-level="15">
       <div class="level-header">
-        <span class="num">15</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۵</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Blind SQL Injection</span>
-        <span class="desc">Boolean-Based</span>
+        <span class="title">تزریق SQL کور</span>
+        <span class="desc">بر اساس بولین</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 4 ===== -->
   <div class="section-divider" id="section4">
-    <span class="section-num">04</span>
-    Blind Injection &amp; Session Attacks
+    <span class="section-num">۰۴</span>
+    تزریق کور و حملات نشست
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-16.html" class="level-card" data-level="16">
+    <a href="./Levels/fa-16.html" class="level-card" data-level="16">
       <div class="level-header">
-        <span class="num">16</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۶</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Blind Command Injection</span>
-        <span class="desc">Character Extraction</span>
+        <span class="title">تزریق دستور کور</span>
+        <span class="desc">استخراج کاراکتر</span>
       </div>
     </a>
-    <a href="./Levels/en-17.html" class="level-card" data-level="17">
+    <a href="./Levels/fa-17.html" class="level-card" data-level="17">
       <div class="level-header">
-        <span class="num">17</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۷</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Blind SQL Injection</span>
-        <span class="desc">Time-Based</span>
+        <span class="title">تزریق SQL کور</span>
+        <span class="desc">بر اساس زمان</span>
       </div>
     </a>
-    <a href="./Levels/en-18.html" class="level-card" data-level="18">
+    <a href="./Levels/fa-18.html" class="level-card" data-level="18">
       <div class="level-header">
-        <span class="num">18</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۸</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Session ID Prediction</span>
+        <span class="title">پیش‌بینی Session ID</span>
         <span class="desc">Brute Force</span>
       </div>
     </a>
-    <a href="./Levels/en-19.html" class="level-card" data-level="19">
+    <a href="./Levels/fa-19.html" class="level-card" data-level="19">
       <div class="level-header">
-        <span class="num">19</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۱۹</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Session ID Encoding</span>
+        <span class="title">Encoding Session ID</span>
         <span class="desc">Hex Encoding</span>
       </div>
     </a>
-    <a href="./Levels/en-20.html" class="level-card" data-level="20">
+    <a href="./Levels/fa-20.html" class="level-card" data-level="20">
       <div class="level-header">
-        <span class="num">20</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۰</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Session Data Injection</span>
-        <span class="desc">Variable Manipulation</span>
+        <span class="title">تزریق داده نشست</span>
+        <span class="desc">دستکاری متغیر</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 5 ===== -->
   <div class="section-divider" id="section5">
-    <span class="section-num">05</span>
-    Advanced Injection &amp; Type Juggling
+    <span class="section-num">۰۵</span>
+    تزریق پیشرفته و Type Juggling
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-21.html" class="level-card" data-level="21">
+    <a href="./Levels/fa-21.html" class="level-card" data-level="21">
       <div class="level-header">
-        <span class="num">21</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۱</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Session Data Injection</span>
-        <span class="desc">Cross-Site Session</span>
+        <span class="title">تزریق داده نشست</span>
+        <span class="desc">نشست بین سایتی</span>
       </div>
     </a>
-    <a href="./Levels/en-22.html" class="level-card" data-level="22">
+    <a href="./Levels/fa-22.html" class="level-card" data-level="22">
       <div class="level-header">
-        <span class="num">22</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۲</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">HTTP Header Injection</span>
-        <span class="desc">Location Header Bypass</span>
+        <span class="title">تزریق هدر HTTP</span>
+        <span class="desc">دور زدن هدر Location</span>
       </div>
     </a>
-    <a href="./Levels/en-23.html" class="level-card" data-level="23">
+    <a href="./Levels/fa-23.html" class="level-card" data-level="23">
       <div class="level-header">
-        <span class="num">23</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۲۳</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
-        <span class="title">PHP Type Juggling</span>
-        <span class="desc">Loose Comparison</span>
+        <span class="title">Type Juggling PHP</span>
+        <span class="desc">مقایسه سست</span>
       </div>
     </a>
-    <a href="./Levels/en-24.html" class="level-card" data-level="24">
+    <a href="./Levels/fa-24.html" class="level-card" data-level="24">
       <div class="level-header">
-        <span class="num">24</span>
-        <span class="diff diff-hard">Hard</span>
+        <span class="num">۲۴</span>
+        <span class="diff diff-hard">سخت</span>
       </div>
       <div class="info">
-        <span class="title">PHP Type Juggling</span>
-        <span class="desc">Advanced Loose Comp.</span>
+        <span class="title">Type Juggling PHP</span>
+        <span class="desc">مقایسه سست پیشرفته</span>
       </div>
     </a>
-    <a href="./Levels/en-25.html" class="level-card" data-level="25">
+    <a href="./Levels/fa-25.html" class="level-card" data-level="25">
       <div class="level-header">
-        <span class="num">25</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۵</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">LFI — Log Poisoning</span>
-        <span class="desc">Log Poisoning</span>
+        <span class="title">LFI — مسمومیت لاگ</span>
+        <span class="desc">مسمومیت لاگ</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 6 ===== -->
   <div class="section-divider" id="section6">
-    <span class="section-num">06</span>
-    Object Injection &amp; Advanced SQL
+    <span class="section-num">۰۶</span>
+    تزریق آبجکت و SQL پیشرفته
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-26.html" class="level-card" data-level="26">
+    <a href="./Levels/fa-26.html" class="level-card" data-level="26">
       <div class="level-header">
-        <span class="num">26</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۶</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">PHP Object Injection</span>
+        <span class="title">تزریق آبجکت PHP</span>
         <span class="desc">Deserialization</span>
       </div>
     </a>
-    <a href="./Levels/en-27.html" class="level-card" data-level="27">
+    <a href="./Levels/fa-27.html" class="level-card" data-level="27">
       <div class="level-header">
-        <span class="num">27</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۷</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">SQL Injection</span>
+        <span class="title">تزریق SQL</span>
         <span class="desc">UNION-Based</span>
       </div>
     </a>
-    <a href="./Levels/en-28.html" class="level-card" data-level="28">
+    <a href="./Levels/fa-28.html" class="level-card" data-level="28">
       <div class="level-header">
-        <span class="num">28</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۸</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">SQL Injection</span>
-        <span class="desc">Stacked Queries</span>
+        <span class="title">تزریق SQL</span>
+        <span class="desc">پرس‌و‌جوهای پشته‌ای</span>
       </div>
     </a>
-    <a href="./Levels/en-29.html" class="level-card" data-level="29">
+    <a href="./Levels/fa-29.html" class="level-card" data-level="29">
       <div class="level-header">
-        <span class="num">29</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۲۹</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">Command Injection</span>
-        <span class="desc">Advanced Filter Bypass</span>
+        <span class="title">تزریق دستور</span>
+        <span class="desc">دور زدن فیلتر پیشرفته</span>
       </div>
     </a>
-    <a href="./Levels/en-30.html" class="level-card" data-level="30">
+    <a href="./Levels/fa-30.html" class="level-card" data-level="30">
       <div class="level-header">
-        <span class="num">30</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۳۰</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">SQL Injection</span>
-        <span class="desc">Filter Bypass</span>
+        <span class="title">تزریق SQL</span>
+        <span class="desc">دور زدن فیلتر</span>
       </div>
     </a>
   </div>
 
   <!-- ===== SECTION 7 ===== -->
   <div class="section-divider" id="section7">
-    <span class="section-num">07</span>
-    File Upload &amp; XXE
+    <span class="section-num">۰۷</span>
+    آپلود فایل و XXE
   </div>
   <div class="level-grid">
-    <a href="./Levels/en-31.html" class="level-card" data-level="31">
+    <a href="./Levels/fa-31.html" class="level-card" data-level="31">
       <div class="level-header">
-        <span class="num">31</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۳۱</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
-        <span class="title">File Upload</span>
-        <span class="desc">Image Verification</span>
+        <span class="title">آپلود فایل</span>
+        <span class="desc">تأیید تصویر</span>
       </div>
     </a>
-    <a href="./Levels/en-32.html" class="level-card" data-level="32">
+    <a href="./Levels/fa-32.html" class="level-card" data-level="32">
       <div class="level-header">
-        <span class="num">32</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۳۲</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
         <span class="title">XXE</span>
         <span class="desc">XML External Entity</span>
       </div>
     </a>
-    <a href="./Levels/en-33.html" class="level-card" data-level="33">
+    <a href="./Levels/fa-33.html" class="level-card" data-level="33">
       <div class="level-header">
-        <span class="num">33</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۳۳</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
         <span class="title">XXE</span>
-        <span class="desc">File Inclusion</span>
+        <span class="desc">شامل فایل</span>
       </div>
     </a>
-    <a href="./Levels/en-34.html" class="level-card" data-level="34">
+    <a href="./Levels/fa-34.html" class="level-card" data-level="34">
       <div class="level-header">
-        <span class="num">34</span>
-        <span class="diff diff-very-hard">Very Hard</span>
+        <span class="num">۳۴</span>
+        <span class="diff diff-very-hard">خیلی سخت</span>
       </div>
       <div class="info">
         <span class="title">XXE</span>
-        <span class="desc">DTD-Based</span>
+        <span class="desc">بر اساس DTD</span>
       </div>
     </a>
   </div>
@@ -2401,23 +2390,23 @@
 <footer>
   <div class="footer-dev">
     <div class="name-line">
-      <span>Developed with</span>
+      <span>ساخته شده با</span>
       <span style="color:var(--accent-rose);">❤️</span>
-      <span>by</span>
-      <a href="https://github.com/this-is-the-leo" target="_blank" class="name">Leo</a>
+      <span>توسط</span>
+      <a href="https://github.com/this-is-the-leo" target="_blank" class="name">لئو</a>
     </div>
     <div class="social-links">
-      <a href="https://github.com/this-is-the-leo" target="_blank">GitHub</a>
+      <a href="https://github.com/this-is-the-leo" target="_blank">گیت‌هاب</a>
       <span class="sep">|</span>
-      <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/ilya-farahani-2160103b0" target="_blank">لینکدین</a>
       <span class="sep">|</span>
-      <a href="https://t.me/Here_is_leo" target="_blank">Telegram</a>
+      <a href="https://t.me/Here_is_leo" target="_blank">تلگرام</a>
       <span class="sep">|</span>
-      <a href="mailto:ilyafarahani9@gmail.com" target="_blank">Email</a>
+      <a href="mailto:ilyafarahani9@gmail.com" target="_blank">ایمیل</a>
     </div>
   </div>
   <div class="footer-copy">
-    &copy; 2025 Leo · OverTheWire Natas Writeup · For Educational Purposes Only
+    &copy; ۲۰۲۵ لئو · راهنمای ناتاس OverTheWire · فقط برای اهداف آموزشی
   </div>
 </footer>
 
@@ -2436,14 +2425,12 @@
   // });
 
   // ============================================================
-  // SWITCH LANGUAGE - FIXED FOR FOLDER STRUCTURE
+  // SWITCH LANGUAGE
   // ============================================================
   function switchLanguage(lang) {
     if (lang === 'en') {
-      // Already on English, reload or stay
       window.location.href = '../en-natas/index.html';
     } else if (lang === 'fa') {
-      // Go to Persian version
       window.location.href = '../fa-natas/index.html';
     }
   }
@@ -2534,25 +2521,25 @@
     const navDots = document.querySelectorAll('.sidebar-nav a');
     const levelDisplay = document.getElementById('levelNumber');
     const progressBar = document.getElementById('scrollProgress');
-
+    
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = docHeight > 0 ? scrollTop / docHeight : 0;
-
+    
     if (progressBar) {
       progressBar.style.width = (progress * 100) + '%';
     }
-
+    
     const progressCircle = document.querySelector('.progress-ring .progress');
     if (progressCircle) {
       const circumference = 138.23;
       const offset = circumference * (1 - progress);
       progressCircle.style.strokeDashoffset = offset;
     }
-
+    
     let currentIndex = 0;
-    let currentLevel = '00';
-
+    let currentLevel = '۰۰';
+    
     sections.forEach((section, index) => {
       const rect = section.getBoundingClientRect();
       if (rect.top <= window.innerHeight / 2) {
@@ -2561,16 +2548,17 @@
         if (grid && grid.classList.contains('level-grid')) {
           const firstCard = grid.querySelector('.level-card');
           if (firstCard && firstCard.dataset.level) {
-            currentLevel = firstCard.dataset.level;
+            const levelNum = parseInt(firstCard.dataset.level);
+            currentLevel = String(levelNum).padStart(2, '۰').replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲').replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵').replace(/6/g, '۶').replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹');
           }
         }
       }
     });
-
+    
     navDots.forEach((dot, index) => {
       dot.classList.toggle('active', index === currentIndex);
     });
-
+    
     if (levelDisplay && levelDisplay.textContent !== currentLevel) {
       levelDisplay.textContent = currentLevel;
       levelDisplay.classList.remove('flip');
@@ -2606,7 +2594,7 @@
   });
 
   // ============================================================
-  // TERMINAL PANEL - Complete Implementation
+  // TERMINAL PANEL
   // ============================================================
   (function () {
     const body = document.getElementById('terminal-body');
@@ -2669,10 +2657,10 @@
       const typingInterval = setInterval(() => {
         charIndex++;
         cmdText.textContent = plainCmd.slice(0, charIndex);
-
+        
         if (charIndex >= plainCmd.length) {
           clearInterval(typingInterval);
-
+          
           cmdText.innerHTML = session.cmd;
           cmdCursor.style.display = 'none';
 
@@ -2681,7 +2669,7 @@
             outputLine.className = 't-line t-out';
             outputLine.innerHTML = session.out;
             body.appendChild(outputLine);
-
+            
             requestAnimationFrame(() => outputLine.classList.add('visible'));
 
             setTimeout(() => {
